@@ -1,8 +1,6 @@
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { HeroSection } from "@/components/sections/hero";
-
-export const dynamic = "force-dynamic";
 import { ServicesSection } from "@/components/sections/services";
 import { TasksSection } from "@/components/sections/tasks";
 import { AdvantagesSection } from "@/components/sections/advantages";
@@ -15,6 +13,8 @@ import { IndustriesSection } from "@/components/sections/industries";
 import { FAQSection } from "@/components/sections/faq";
 import { ArticlesPreviewSection } from "@/components/sections/articles-preview";
 import { CTASection } from "@/components/sections/cta";
+
+export const dynamic = "force-dynamic";
 
 export default function HomePage() {
   return (

@@ -1,3 +1,4 @@
+import { unstable_noStore as noStore } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
 import { ArrowRight, Tag } from "lucide-react";
@@ -15,6 +16,7 @@ const industryLabels: Record<string, string> = {
 };
 
 export async function CasesPreviewSection() {
+  noStore();
   const supabase = await createClient();
   const { data: cases } = await supabase
     .from("cases")

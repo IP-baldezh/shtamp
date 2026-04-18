@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Menu, X, ChevronDown, Phone, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { cn } from "@/lib/utils";
 
 export interface ContactInfo {
@@ -181,6 +182,7 @@ export function Header({ contact }: { contact?: ContactInfo }) {
 
         {/* CTA buttons */}
         <div className="hidden items-center gap-3 lg:flex">
+          <ThemeToggle />
           <Button variant="ghost" size="sm" asChild>
             <Link href="/contact">Связаться</Link>
           </Button>
@@ -249,6 +251,10 @@ export function Header({ contact }: { contact?: ContactInfo }) {
               <Button asChild>
                 <Link href="/quote">Запросить КП</Link>
               </Button>
+              <div className="flex items-center justify-between rounded-lg border border-border px-3 py-2">
+                <span className="text-sm text-muted-foreground">Тема оформления</span>
+                <ThemeToggle />
+              </div>
             </div>
           </div>
         </div>

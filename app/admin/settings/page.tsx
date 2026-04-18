@@ -32,6 +32,10 @@ const SOCIAL_PLATFORMS: { icon: string; label: string }[] = [
   { icon: "telegram", label: "Telegram" },
   { icon: "whatsapp", label: "WhatsApp" },
   { icon: "vk", label: "ВКонтакте" },
+  { icon: "odnoklassniki", label: "Одноклассники" },
+  { icon: "rutube", label: "Rutube" },
+  { icon: "yandex", label: "Яндекс" },
+  { icon: "dzen", label: "Дзен" },
   { icon: "youtube", label: "YouTube" },
   { icon: "instagram", label: "Instagram" },
   { icon: "pinterest", label: "Pinterest" },
@@ -39,6 +43,7 @@ const SOCIAL_PLATFORMS: { icon: string; label: string }[] = [
   { icon: "tiktok", label: "TikTok" },
   { icon: "twitter", label: "X (Twitter)" },
   { icon: "facebook", label: "Facebook" },
+  { icon: "max", label: "MAX" },
   { icon: "behance", label: "Behance" },
 ];
 
