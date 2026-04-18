@@ -98,7 +98,7 @@ export function RichTextEditor({
   // Sync external value changes (e.g., when form is reset)
   useEffect(() => {
     if (editor && value !== editor.getHTML()) {
-      editor.commands.setContent(value, false);
+      editor.commands.setContent(value);
     }
   }, [editor, value]);
 

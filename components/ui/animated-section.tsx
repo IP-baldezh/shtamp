@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useInView } from "motion/react";
+import { type Variants, motion, useInView } from "motion/react";
 import { useRef } from "react";
 
 interface AnimatedSectionProps {
@@ -19,7 +19,7 @@ export function AnimatedSection({
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
-  const variants = {
+  const variants: Variants = {
     hidden: {
       opacity: 0,
       y: direction === "up" ? 40 : direction === "down" ? -40 : 0,
