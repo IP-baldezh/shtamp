@@ -4,7 +4,8 @@ import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { ContactForm } from "./contact-form";
 import { SocialLinks } from "@/components/ui/social-links";
-import { getCompanySettings, getSocialLinks, phoneToTel } from "@/lib/settings";
+import { getCompanySettings, getSocialLinks } from "@/lib/settings.server";
+import { phoneToTel } from "@/lib/settings";
 
 export default async function ContactPage() {
   const [settings, socialLinks] = await Promise.all([getCompanySettings(), getSocialLinks()]);

@@ -4,7 +4,8 @@ import { CheckCircle, Phone, Mail, ArrowRight, Clock, FileText, Users } from "lu
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { Button } from "@/components/ui/button";
-import { getCompanySettings, phoneToTel } from "@/lib/settings";
+import { getCompanySettings } from "@/lib/settings.server";
+import { phoneToTel } from "@/lib/settings";
 
 export const metadata: Metadata = {
   title: "Спасибо за обращение | ШТАМП",

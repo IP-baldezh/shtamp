@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { getSocialLinks } from "@/lib/settings";
+import { getSocialLinks } from "@/lib/settings.server";
 import { Footer } from "./footer";
 
 export async function SiteFooter() {
