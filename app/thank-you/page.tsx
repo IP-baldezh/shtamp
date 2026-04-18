@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import { getCompanySettings } from "@/lib/settings.server";
 import { phoneToTel } from "@/lib/settings";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Спасибо за обращение | ШТАМП",
   description: "Ваша заявка успешно отправлена. Мы свяжемся с вами в ближайшее время.",

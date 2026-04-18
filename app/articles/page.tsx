@@ -7,6 +7,8 @@ import { CTASection } from "@/components/sections/cta";
 import { createClient } from "@/lib/supabase/server";
 import { ArticlesFilter } from "./articles-filter";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Статьи о штамповке и производстве оснастки | ШТАМП",
   description:

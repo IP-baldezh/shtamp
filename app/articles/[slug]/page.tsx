@@ -7,6 +7,8 @@ import { CTASection } from "@/components/sections/cta";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
+export const dynamic = "force-dynamic";
+
 type Props = {
   params: Promise<{ slug: string }>;
 };

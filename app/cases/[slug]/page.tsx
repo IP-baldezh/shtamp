@@ -8,6 +8,8 @@ import { CTASection } from "@/components/sections/cta";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
+export const dynamic = "force-dynamic";
+
 const industryLabels: Record<string, string> = {
   automotive: "Автомобильная",
   aerospace: "Авиакосмос",

@@ -18,9 +18,9 @@ export async function CasesPreviewSection() {
   const supabase = await createClient();
   const { data: cases } = await supabase
     .from("cases")
-    .select("slug, title, client, industry, description, results")
+    .select("slug, title, client, industry, description, results, featured")
     .eq("status", "published")
-    .eq("featured", true)
+    .order("featured", { ascending: false })
     .order("created_at", { ascending: false })
     .limit(3);
 

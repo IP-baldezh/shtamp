@@ -8,6 +8,8 @@ import { SocialLinks } from "@/components/ui/social-links";
 import { getCompanySettings, getSocialLinks } from "@/lib/settings.server";
 import { phoneToTel } from "@/lib/settings";
 
+export const dynamic = "force-dynamic";
+
 export default async function ContactPage() {
   const [settings, socialLinks] = await Promise.all([getCompanySettings(), getSocialLinks()]);
   return (

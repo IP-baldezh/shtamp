@@ -4,6 +4,8 @@ import { CTASection } from "@/components/sections/cta";
 import { createClient } from "@/lib/supabase/server";
 import { CasesContent } from "./cases-content";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "Реализованные проекты | ШТАМП",
   description:
