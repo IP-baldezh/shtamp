@@ -1,15 +1,24 @@
+import type { Metadata } from "next";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { CTASection } from "@/components/sections/cta";
 import { createClient } from "@/lib/supabase/server";
 import { CasesContent } from "./cases-content";
+import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = {
-  title: "Реализованные проекты | ШТАМП",
+export const metadata: Metadata = {
+  title: "Реализованные проекты",
   description:
-    "Примеры выполненных работ для предприятий различных отраслей. Каждый проект — индивидуальное решение под задачи клиента.",
+    "Примеры выполненных работ для предприятий различных отраслей. Каждый проект — индивидуальное решение под задачи клиента.",
+  alternates: { canonical: "/cases" },
+  openGraph: {
+    title: "Реализованные проекты | ШТАМП",
+    description: "Примеры выполненных работ для предприятий различных отраслей.",
+    url: "/cases",
+    type: "website",
+  },
 };
 
 export default async function CasesPage() {
@@ -25,6 +34,11 @@ export default async function CasesPage() {
     <>
       <SiteHeader />
       <main className="pt-32">
+        <section className="pb-4">
+          <div className="mx-auto max-w-7xl px-6">
+            <Breadcrumbs items={[{ name: "Проекты" }]} />
+          </div>
+        </section>
         <section className="relative pb-16">
           <div className="absolute inset-0 industrial-grid opacity-20" />
           <div className="relative mx-auto max-w-7xl px-6">

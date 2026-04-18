@@ -7,9 +7,17 @@ import { Button } from "@/components/ui/button";
 import { CTASection } from "@/components/sections/cta";
 
 export const metadata: Metadata = {
-  title: "Услуги | ШТАМП",
+  title: "Услуги по производству оснастки",
   description:
     "Изготовление штампов, пресс-форм, проектирование оснастки, ремонт и модернизация. Полный цикл производства штамповой оснастки.",
+  alternates: { canonical: "/services" },
+  openGraph: {
+    title: "Услуги | ШТАМП",
+    description:
+      "Изготовление штампов, пресс-форм, проектирование оснастки, ремонт и модернизация.",
+    url: "/services",
+    type: "website",
+  },
 };
 
 const services = [

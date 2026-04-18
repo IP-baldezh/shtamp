@@ -14,11 +14,21 @@ import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { Button } from "@/components/ui/button";
 import { CTASection } from "@/components/sections/cta";
+import { serviceSchema, breadcrumbSchema } from "@/lib/seo/schema";
+import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 
 export const metadata: Metadata = {
-  title: "Проектирование штампов и пресс-форм | ШТАМП",
+  title: "Проектирование штампов и пресс-форм",
   description:
     "Полный цикл конструкторских работ: 3D-моделирование, расчет технологии, симуляция штамповки, выпуск КД по ЕСКД.",
+  alternates: { canonical: "/services/design" },
+  openGraph: {
+    title: "Проектирование штампов и пресс-форм | ШТАМП",
+    description:
+      "Полный цикл конструкторских работ: 3D-моделирование, расчет технологии, симуляция.",
+    url: "/services/design",
+    type: "website",
+  },
 };
 
 const services = [
@@ -100,6 +110,11 @@ export default function DesignServicePage() {
     <>
       <SiteHeader />
       <main className="pt-32">
+        <section className="pb-4">
+          <div className="mx-auto max-w-7xl px-6">
+            <Breadcrumbs items={[{ name: "Услуги", href: "/services" }, { name: "Проектирование" }]} />
+          </div>
+        </section>
         {/* Hero section */}
         <section className="relative pb-20">
           <div className="absolute inset-0 industrial-grid opacity-20" />

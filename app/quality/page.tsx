@@ -3,11 +3,20 @@ import { Check, Shield, Ruler, FileCheck, Award, Eye, ClipboardCheck } from "luc
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { CTASection } from "@/components/sections/cta";
+import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 
 export const metadata: Metadata = {
-  title: "Контроль качества | ШТАМП",
+  title: "Контроль качества",
   description:
-    "Система контроля качества по ISO 9001:2015. Входной, операционный и приемочный контроль. Современное измерительное оборудование.",
+    "Система контроля качества по ISO 9001:2015. Входной, операционный и приёмочный контроль. Современное измерительное оборудование.",
+  alternates: { canonical: "/quality" },
+  openGraph: {
+    title: "Контроль качества | ШТАМП",
+    description:
+      "Система контроля качества по ISO 9001:2015. Современное измерительное оборудование.",
+    url: "/quality",
+    type: "website",
+  },
 };
 
 const controlStages = [
@@ -107,6 +116,11 @@ export default function QualityPage() {
     <>
       <SiteHeader />
       <main className="pt-32">
+        <section className="pb-4">
+          <div className="mx-auto max-w-7xl px-6">
+            <Breadcrumbs items={[{ name: "Контроль качества" }]} />
+          </div>
+        </section>
         {/* Hero section */}
         <section className="relative pb-20">
           <div className="absolute inset-0 industrial-grid opacity-20" />

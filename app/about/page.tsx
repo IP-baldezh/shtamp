@@ -5,11 +5,20 @@ import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { Button } from "@/components/ui/button";
 import { CTASection } from "@/components/sections/cta";
+import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 
 export const metadata: Metadata = {
-  title: "О компании | ШТАМП",
+  title: "О компании",
   description:
     "Компания ШТАМП — более 18 лет на рынке производства штампов и пресс-форм. Собственное производство в Москве, команда опытных инженеров.",
+  alternates: { canonical: "/about" },
+  openGraph: {
+    title: "О компании ШТАМП",
+    description:
+      "Более 18 лет на рынке производства штампов и пресс-форм. Собственное производство в Москве.",
+    url: "/about",
+    type: "website",
+  },
 };
 
 const milestones = [
@@ -90,6 +99,11 @@ export default function AboutPage() {
     <>
       <SiteHeader />
       <main className="pt-32">
+        <section className="pb-4">
+          <div className="mx-auto max-w-7xl px-6">
+            <Breadcrumbs items={[{ name: "О компании" }]} />
+          </div>
+        </section>
         {/* Hero section */}
         <section className="relative pb-20">
           <div className="absolute inset-0 industrial-grid opacity-20" />

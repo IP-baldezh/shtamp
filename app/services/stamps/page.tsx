@@ -5,11 +5,21 @@ import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { Button } from "@/components/ui/button";
 import { CTASection } from "@/components/sections/cta";
+import { serviceSchema, breadcrumbSchema } from "@/lib/seo/schema";
+import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 
 export const metadata: Metadata = {
-  title: "Изготовление штампов холодной штамповки | ШТАМП",
+  title: "Изготовление штампов холодной штамповки",
   description:
     "Производство штампов любой сложности: вырубные, гибочные, вытяжные, комбинированные. Собственное производство в Москве.",
+  alternates: { canonical: "/services/stamps" },
+  openGraph: {
+    title: "Изготовление штампов холодной штамповки | ШТАМП",
+    description:
+      "Производство штампов любой сложности: вырубные, гибочные, вытяжные, комбинированные.",
+    url: "/services/stamps",
+    type: "website",
+  },
 };
 
 const stampTypes = [
@@ -82,6 +92,11 @@ export default function StampsServicePage() {
     <>
       <SiteHeader />
       <main className="pt-32">
+        <section className="pb-4">
+          <div className="mx-auto max-w-7xl px-6">
+            <Breadcrumbs items={[{ name: "Услуги", href: "/services" }, { name: "Изготовление штампов" }]} />
+          </div>
+        </section>
         {/* Hero section */}
         <section className="relative pb-20">
           <div className="absolute inset-0 industrial-grid opacity-20" />

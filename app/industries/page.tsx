@@ -5,11 +5,20 @@ import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { Button } from "@/components/ui/button";
 import { CTASection } from "@/components/sections/cta";
+import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 
 export const metadata: Metadata = {
-  title: "Отрасли применения | ШТАМП",
+  title: "Отрасли применения",
   description:
     "Производим штампы и пресс-формы для автомобильной, электротехнической, упаковочной промышленности и других отраслей.",
+  alternates: { canonical: "/industries" },
+  openGraph: {
+    title: "Отрасли применения | ШТАМП",
+    description:
+      "Производим штампы и пресс-формы для автомобильной, электротехнической и других отраслей.",
+    url: "/industries",
+    type: "website",
+  },
 };
 
 const industries = [
@@ -107,13 +116,7 @@ export default function IndustriesPage() {
           <div className="absolute inset-0 industrial-grid opacity-20" />
           <div className="relative mx-auto max-w-7xl px-6">
             <div className="mx-auto max-w-3xl text-center">
-              <nav className="mb-6 flex items-center justify-center gap-2 text-sm text-muted-foreground">
-                <Link href="/" className="hover:text-primary transition-colors">
-                  Главная
-                </Link>
-                <span>/</span>
-                <span className="text-foreground">Отрасли</span>
-              </nav>
+              <Breadcrumbs className="justify-center" items={[{ name: "Отрасли" }]} />
               <div className="mb-4 text-sm font-semibold uppercase tracking-wider text-primary">
                 Отрасли
               </div>

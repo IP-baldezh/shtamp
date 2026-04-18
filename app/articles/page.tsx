@@ -6,13 +6,22 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import { CTASection } from "@/components/sections/cta";
 import { createClient } from "@/lib/supabase/server";
 import { ArticlesFilter } from "./articles-filter";
+import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Статьи о штамповке и производстве оснастки | ШТАМП",
+  title: "Статьи о штамповке и производстве оснастки",
   description:
     "Полезные статьи о технологиях штамповки, проектировании штампов, материалах и оборудовании для металлообработки.",
+  alternates: { canonical: "/articles" },
+  openGraph: {
+    title: "Статьи о штамповке и производстве оснастки | ШТАМП",
+    description:
+      "Полезные статьи о технологиях штамповки и проектировании штампов.",
+    url: "/articles",
+    type: "website",
+  },
 };
 
 type SearchParams = Promise<{ category?: string }>;
@@ -50,6 +59,11 @@ export default async function ArticlesPage({ searchParams }: { searchParams: Sea
     <>
       <SiteHeader />
       <main className="pt-32">
+        <section className="pb-4">
+          <div className="mx-auto max-w-7xl px-6">
+            <Breadcrumbs items={[{ name: "Статьи" }]} />
+          </div>
+        </section>
         {/* Hero section */}
         <section className="relative pb-16">
           <div className="absolute inset-0 industrial-grid opacity-20" />

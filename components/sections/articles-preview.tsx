@@ -1,9 +1,11 @@
+import { unstable_noStore as noStore } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
 import { ArrowRight, Calendar, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export async function ArticlesPreviewSection() {
+  noStore();
   const supabase = await createClient();
   const { data: articles } = await supabase
     .from("articles")

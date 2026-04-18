@@ -5,11 +5,21 @@ import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { Button } from "@/components/ui/button";
 import { CTASection } from "@/components/sections/cta";
+import { serviceSchema, breadcrumbSchema } from "@/lib/seo/schema";
+import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 
 export const metadata: Metadata = {
-  title: "Ремонт и модернизация штампов | ШТАМП",
+  title: "Ремонт и модернизация штампов",
   description:
     "Восстановление работоспособности оснастки, увеличение ресурса, оптимизация конструкции штампов и пресс-форм.",
+  alternates: { canonical: "/services/repair" },
+  openGraph: {
+    title: "Ремонт и модернизация штампов | ШТАМП",
+    description:
+      "Восстановление работоспособности оснастки, увеличение ресурса, оптимизация.",
+    url: "/services/repair",
+    type: "website",
+  },
 };
 
 const services = [
@@ -114,6 +124,11 @@ export default function RepairServicePage() {
     <>
       <SiteHeader />
       <main className="pt-32">
+        <section className="pb-4">
+          <div className="mx-auto max-w-7xl px-6">
+            <Breadcrumbs items={[{ name: "Услуги", href: "/services" }, { name: "Ремонт и модернизация" }]} />
+          </div>
+        </section>
         {/* Hero section */}
         <section className="relative pb-20">
           <div className="absolute inset-0 industrial-grid opacity-20" />

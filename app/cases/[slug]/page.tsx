@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowLeft, ArrowRight, Check, Tag, Factory, Target } from "lucide-react";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
@@ -7,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { CTASection } from "@/components/sections/cta";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { breadcrumbSchema } from "@/lib/seo/schema";
+import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 
 export const dynamic = "force-dynamic";
 
@@ -37,16 +40,30 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const supabase = await createClient();
   const { data } = await supabase
     .from("cases")
-    .select("title, description")
+    .select("title, description, image_url")
     .eq("slug", slug)
     .eq("status", "published")
     .single();
 
-  if (!data) return { title: "Кейс не найден | ШТАМП" };
+  if (!data) return { title: "Кейс не найден" };
 
   return {
-    title: `${data.title} | ШТАМП`,
+    title: data.title,
     description: data.description,
+    alternates: { canonical: `/cases/${slug}` },
+    openGraph: {
+      title: `${data.title} | ШТАМП`,
+      description: data.description ?? undefined,
+      url: `/cases/${slug}`,
+      type: "article",
+      ...(data.image_url ? { images: [{ url: data.image_url }] } : {}),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${data.title} | ШТАМП`,
+      description: data.description ?? undefined,
+      ...(data.image_url ? { images: [data.image_url] } : {}),
+    },
   };
 }
 
@@ -77,15 +94,9 @@ export default async function CaseDetailPage({ params }: Props) {
     <>
       <SiteHeader />
       <main className="pt-32">
-        <section className="pb-8">
+        <section className="pb-4">
           <div className="mx-auto max-w-7xl px-6">
-            <Link
-              href="/cases"
-              className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              Все кейсы
-            </Link>
+            <Breadcrumbs items={[{ name: "Проекты", href: "/cases" }, { name: caseData.title }]} />
           </div>
         </section>
 
@@ -126,10 +137,13 @@ export default async function CaseDetailPage({ params }: Props) {
 
               <div className="relative aspect-video overflow-hidden rounded-2xl border border-border bg-secondary lg:aspect-square">
                 {caseData.image_url ? (
-                  <img
+                  <Image
                     src={caseData.image_url}
                     alt={caseData.title}
-                    className="w-full h-full object-cover"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    className="object-cover"
+                    priority
                   />
                 ) : (
                   <>

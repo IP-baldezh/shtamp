@@ -7,6 +7,7 @@ import { ContactForm } from "./contact-form";
 import { SocialLinks } from "@/components/ui/social-links";
 import { getCompanySettings, getSocialLinks } from "@/lib/settings.server";
 import { phoneToTel } from "@/lib/settings";
+import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 
 export const dynamic = "force-dynamic";
 
@@ -20,13 +21,7 @@ export default async function ContactPage() {
           <div className="absolute inset-0 industrial-grid opacity-20" />
           <div className="relative mx-auto max-w-7xl px-6">
             <div className="max-w-3xl">
-              <nav className="mb-6 flex items-center gap-2 text-sm text-muted-foreground">
-                <Link href="/" className="hover:text-primary transition-colors">
-                  Главная
-                </Link>
-                <span>/</span>
-                <span className="text-foreground">Контакты</span>
-              </nav>
+              <Breadcrumbs items={[{ name: "Контакты" }]} />
               <div className="mb-4 text-sm font-semibold uppercase tracking-wider text-primary">
                 Контакты
               </div>

@@ -5,11 +5,21 @@ import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { Button } from "@/components/ui/button";
 import { CTASection } from "@/components/sections/cta";
+import { serviceSchema, breadcrumbSchema } from "@/lib/seo/schema";
+import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 
 export const metadata: Metadata = {
-  title: "Изготовление пресс-форм для литья | ШТАМП",
+  title: "Изготовление пресс-форм для литья",
   description:
     "Производство пресс-форм для литья пластмасс под давлением и литья металлов. Горячеканальные системы, многоместные формы.",
+  alternates: { canonical: "/services/molds" },
+  openGraph: {
+    title: "Изготовление пресс-форм для литья | ШТАМП",
+    description:
+      "Производство пресс-форм для литья пластмасс под давлением и литья металлов.",
+    url: "/services/molds",
+    type: "website",
+  },
 };
 
 const moldTypes = [
@@ -71,6 +81,11 @@ export default function MoldsServicePage() {
     <>
       <SiteHeader />
       <main className="pt-32">
+        <section className="pb-4">
+          <div className="mx-auto max-w-7xl px-6">
+            <Breadcrumbs items={[{ name: "Услуги", href: "/services" }, { name: "Пресс-формы" }]} />
+          </div>
+        </section>
         {/* Hero section */}
         <section className="relative pb-20">
           <div className="absolute inset-0 industrial-grid opacity-20" />

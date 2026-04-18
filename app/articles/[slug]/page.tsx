@@ -1,11 +1,14 @@
 import { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowLeft, Calendar, Tag, Share2 } from "lucide-react";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { CTASection } from "@/components/sections/cta";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { articleSchema, breadcrumbSchema } from "@/lib/seo/schema";
+import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 
 export const dynamic = "force-dynamic";
 
@@ -18,18 +21,33 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const supabase = await createClient();
   const { data: article } = await supabase
     .from("articles")
-    .select("title, excerpt")
+    .select("title, excerpt, image_url, published_at")
     .eq("slug", slug)
     .eq("status", "published")
     .single();
 
   if (!article) {
-    return { title: "Статья не найдена | ШТАМП" };
+    return { title: "Статья не найдена" };
   }
 
   return {
-    title: `${article.title} | ШТАМП`,
+    title: article.title,
     description: article.excerpt,
+    alternates: { canonical: `/articles/${slug}` },
+    openGraph: {
+      title: `${article.title} | ШТАМП`,
+      description: article.excerpt ?? undefined,
+      url: `/articles/${slug}`,
+      type: "article",
+      publishedTime: article.published_at ?? undefined,
+      ...(article.image_url ? { images: [{ url: article.image_url }] } : {}),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${article.title} | ШТАМП`,
+      description: article.excerpt ?? undefined,
+      ...(article.image_url ? { images: [article.image_url] } : {}),
+    },
   };
 }
 
@@ -57,14 +75,34 @@ export default async function ArticleDetailPage({ params }: Props) {
     .neq("slug", slug)
     .limit(3);
 
-  const paragraphs = article.content
+  // Detect if content is HTML (TipTap output) or plain text
+  const isHtml = article.content?.trimStart().startsWith("<");
+  const paragraphs = !isHtml && article.content
     ? article.content.split("\n").filter((p: string) => p.trim())
     : [];
+
+  const jsonLd = articleSchema({
+    title: article.title,
+    description: article.excerpt ?? article.title,
+    slug: article.slug ?? String(article.id),
+    publishedAt: article.published_at,
+    updatedAt: article.updated_at,
+    image: article.image_url ?? undefined,
+  });
 
   return (
     <>
       <SiteHeader />
       <main className="pt-32">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        <section className="pb-4">
+          <div className="mx-auto max-w-4xl px-6">
+            <Breadcrumbs items={[{ name: "Статьи", href: "/articles" }, { name: article.title }]} />
+          </div>
+        </section>
         <section className="pb-8">
           <div className="mx-auto max-w-4xl px-6">
             <Link
@@ -124,38 +162,48 @@ export default async function ArticleDetailPage({ params }: Props) {
             </div>
 
             {article.image_url && (
-              <div className="mt-8 overflow-hidden rounded-2xl">
-                <img
+              <div className="mt-8 relative aspect-video overflow-hidden rounded-2xl">
+                <Image
                   src={article.image_url}
                   alt={article.title}
-                  className="w-full aspect-video object-cover"
+                  fill
+                  sizes="(max-width: 896px) 100vw, 896px"
+                  className="object-cover"
+                  priority
                 />
               </div>
             )}
 
-            <div className="mt-8 space-y-4">
-              {paragraphs.map((paragraph: string, index: number) => {
-                if (paragraph.startsWith("## ")) {
+            {isHtml ? (
+              <div
+                className="mt-8 prose prose-invert max-w-none"
+                dangerouslySetInnerHTML={{ __html: article.content }}
+              />
+            ) : (
+              <div className="mt-8 space-y-4">
+                {paragraphs.map((paragraph: string, index: number) => {
+                  if (paragraph.startsWith("## ")) {
+                    return (
+                      <h2 key={index} className="mt-8 mb-4 text-2xl font-bold text-foreground">
+                        {paragraph.replace("## ", "")}
+                      </h2>
+                    );
+                  }
+                  if (paragraph.startsWith("# ")) {
+                    return (
+                      <h3 key={index} className="mt-6 mb-3 text-xl font-bold text-foreground">
+                        {paragraph.replace("# ", "")}
+                      </h3>
+                    );
+                  }
                   return (
-                    <h2 key={index} className="mt-8 mb-4 text-2xl font-bold text-foreground">
-                      {paragraph.replace("## ", "")}
-                    </h2>
+                    <p key={index} className="text-muted-foreground leading-relaxed">
+                      {paragraph}
+                    </p>
                   );
-                }
-                if (paragraph.startsWith("# ")) {
-                  return (
-                    <h3 key={index} className="mt-6 mb-3 text-xl font-bold text-foreground">
-                      {paragraph.replace("# ", "")}
-                    </h3>
-                  );
-                }
-                return (
-                  <p key={index} className="text-muted-foreground leading-relaxed">
-                    {paragraph}
-                  </p>
-                );
-              })}
-            </div>
+                })}
+              </div>
+            )}
           </div>
         </article>
 

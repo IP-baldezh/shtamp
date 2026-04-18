@@ -1,25 +1,35 @@
 ﻿import { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, Check, Settings, Image as ImageIcon } from "lucide-react";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { Button } from "@/components/ui/button";
 import { CTASection } from "@/components/sections/cta";
 import { createClient } from "@/lib/supabase/server";
+import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "РћР±РѕСЂСѓРґРѕРІР°РЅРёРµ РїСЂРѕРёР·РІРѕРґСЃС‚РІР° | РЁРўРђРњРџ",
+  title: "Оборудование производства",
   description:
-    "РџР°СЂРє СЃРѕРІСЂРµРјРµРЅРЅРѕРіРѕ РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЏ: СЃС‚Р°РЅРєРё СЃ Р§РџРЈ, СЌР»РµРєС‚СЂРѕСЌСЂРѕР·РёРѕРЅРЅС‹Рµ СЃС‚Р°РЅРєРё, РєРѕРѕСЂРґРёРЅР°С‚РЅРѕ-РёР·РјРµСЂРёС‚РµР»СЊРЅС‹Рµ РјР°С€РёРЅС‹, С‚РµСЂРјРёС‡РµСЃРєРѕРµ РѕР±РѕСЂСѓРґРѕРІР°РЅРёРµ.",
+    "Парк современного оборудования: станки с ЧПУ, электроэрозионные станки, координатно-измерительные машины, термическое оборудование.",
+  alternates: { canonical: "/equipment" },
+  openGraph: {
+    title: "Оборудование производства | ШТАМП",
+    description:
+      "Парк современного оборудования: станки с ЧПУ, электроэрозионные станки, КИМ.",
+    url: "/equipment",
+    type: "website",
+  },
 };
 
 const stats = [
-  { value: "50+", label: "Р•РґРёРЅРёС† РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЏ" },
-  { value: "2000 РјВІ", label: "РџСЂРѕРёР·РІРѕРґСЃС‚РІРµРЅРЅР°СЏ РїР»РѕС‰Р°РґСЊ" },
-  { value: "24/7", label: "Р РµР¶РёРј СЂР°Р±РѕС‚С‹" },
-  { value: "ISO 9001", label: "РЎРµСЂС‚РёС„РёРєР°С†РёСЏ" },
+  { value: "50+", label: "Единиц оборудования" },
+  { value: "2000 м²", label: "Производственная площадь" },
+  { value: "24/7", label: "Режим работы" },
+  { value: "ISO 9001", label: "Сертификация" },
 ];
 
 export default async function EquipmentPage() {
@@ -42,23 +52,27 @@ export default async function EquipmentPage() {
     <>
       <SiteHeader />
       <main className="pt-32">
+        <section className="pb-4">
+          <div className="mx-auto max-w-7xl px-6">
+            <Breadcrumbs items={[{ name: "Оборудование" }]} />
+          </div>
+        </section>
         {/* Hero section */}
         <section className="relative pb-20">
           <div className="absolute inset-0 industrial-grid opacity-20" />
           <div className="relative mx-auto max-w-7xl px-6">
             <div className="max-w-3xl">
               <div className="mb-4 text-sm font-semibold uppercase tracking-wider text-primary">
-                РџСЂРѕРёР·РІРѕРґСЃС‚РІРѕ
+                Производство
               </div>
               <h1 className="text-4xl font-bold text-foreground md:text-5xl">
-                РћР±РѕСЂСѓРґРѕРІР°РЅРёРµ
+                Оборудование
                 <br />
-                <span className="text-primary">РЅР°С€РµРіРѕ РїСЂРѕРёР·РІРѕРґСЃС‚РІР°</span>
+                <span className="text-primary">нашего производства</span>
               </h1>
               <p className="mt-6 text-lg text-muted-foreground">
-                РџР°СЂРє СЃРѕРІСЂРµРјРµРЅРЅРѕРіРѕ РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЏ РІРµРґСѓС‰РёС…
-                РјРёСЂРѕРІС‹С… РїСЂРѕРёР·РІРѕРґРёС‚РµР»РµР№ РѕР±РµСЃРїРµС‡РёРІР°РµС‚ РІС‹СЃРѕРєСѓСЋ
-                С‚РѕС‡РЅРѕСЃС‚СЊ Рё РєР°С‡РµСЃС‚РІРѕ РёР·РіРѕС‚РѕРІР»РµРЅРёСЏ РѕСЃРЅР°СЃС‚РєРё.
+                Парк современного оборудования ведущих мировых производителей обеспечивает высокую
+                точность и качество изготовления оснастки.
               </p>
             </div>
           </div>
@@ -84,7 +98,7 @@ export default async function EquipmentPage() {
             {categories.length === 0 ? (
               <div className="py-16 text-center text-muted-foreground">
                 <Settings className="mx-auto mb-4 h-12 w-12 opacity-30" />
-                <p>РћР±РѕСЂСѓРґРѕРІР°РЅРёРµ РЅРµ РґРѕР±Р°РІР»РµРЅРѕ</p>
+                <p>Оборудование не добавлено</p>
               </div>
             ) : (
               <div className="space-y-16">
@@ -103,11 +117,13 @@ export default async function EquipmentPage() {
                           className="group overflow-hidden rounded-xl border border-border bg-card transition-all hover:border-primary/50"
                         >
                           {item.image_url ? (
-                            <div className="aspect-video overflow-hidden bg-secondary">
-                              <img
+                            <div className="relative aspect-video overflow-hidden bg-secondary">
+                              <Image
                                 src={item.image_url}
                                 alt={item.name}
-                                className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                                fill
+                                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                                className="object-cover transition-transform duration-300 group-hover:scale-105"
                               />
                             </div>
                           ) : (
@@ -154,17 +170,16 @@ export default async function EquipmentPage() {
           <div className="mx-auto max-w-7xl px-6">
             <div className="rounded-2xl border border-border bg-gradient-to-br from-primary/5 to-transparent p-8 md:p-12 text-center">
               <h2 className="text-3xl font-bold text-foreground">
-                РҐРѕС‚РёС‚Рµ СѓРІРёРґРµС‚СЊ РїСЂРѕРёР·РІРѕРґСЃС‚РІРѕ?
+                Хотите увидеть производство?
               </h2>
               <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
-                РџСЂРёРіР»Р°С€Р°РµРј РЅР° СЌРєСЃРєСѓСЂСЃРёСЋ РїРѕ РЅР°С€РµРјСѓ
-                РїСЂРѕРёР·РІРѕРґСЃС‚РІРµРЅРЅРѕРјСѓ РєРѕРјРїР»РµРєСЃСѓ. РџРѕРєР°Р¶РµРј
-                РѕР±РѕСЂСѓРґРѕРІР°РЅРёРµ Рё РїСЂРѕС†РµСЃСЃС‹ РёР·РіРѕС‚РѕРІР»РµРЅРёСЏ.
+                Приглашаем на экскурсию по нашему производственному комплексу. Покажем оборудование
+                и процессы изготовления.
               </p>
               <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
                 <Button size="lg" className="glow-blue-subtle" asChild>
                   <Link href="/contact">
-                    Р—Р°РїРёСЃР°С‚СЊСЃСЏ РЅР° СЌРєСЃРєСѓСЂСЃРёСЋ
+                    Записаться на экскурсию
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
