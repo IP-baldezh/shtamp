@@ -1,14 +1,15 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { X, Phone, User, Building2, AlertTriangle } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { useState } from "react"
+import { createClient } from "@/lib/supabase/client"
+import { X, Phone, User, Building2, AlertTriangle, Loader2 } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 
 interface CallbackModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  isUrgent?: boolean;
+  isOpen: boolean
+  onClose: () => void
+  isUrgent?: boolean
 }
 
 export function CallbackModal({ isOpen, onClose, isUrgent = false }: CallbackModalProps) {
@@ -17,30 +18,48 @@ export function CallbackModal({ isOpen, onClose, isUrgent = false }: CallbackMod
     company: "",
     phone: "",
     message: "",
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSubmitted, setIsSubmitted] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const supabase = createClient()
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setIsSubmitting(false);
-    setIsSubmitted(true);
-  };
+    e.preventDefault()
+    setIsSubmitting(true)
+    setError(null)
+
+    const { error: insertError } = await supabase.from("contact_requests").insert({
+      name: formData.name,
+      company: formData.company || null,
+      phone: formData.phone,
+      message: formData.message || null,
+      request_type: isUrgent ? "urgent_callback" : "callback",
+      is_urgent: isUrgent,
+    })
+
+    setIsSubmitting(false)
+
+    if (insertError) {
+      setError("Произошла ошибка. Попробуйте позвонить нам напрямую.")
+      return
+    }
+
+    setIsSubmitted(true)
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+    setFormData({ ...formData, [e.target.name]: e.target.value })
+  }
 
   const handleClose = () => {
-    setFormData({ name: "", company: "", phone: "", message: "" });
-    setIsSubmitted(false);
-    onClose();
-  };
+    setFormData({ name: "", company: "", phone: "", message: "" })
+    setIsSubmitted(false)
+    setError(null)
+    onClose()
+  }
 
-  if (!isOpen) return null;
+  if (!isOpen) return null
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center">
@@ -98,6 +117,13 @@ export function CallbackModal({ isOpen, onClose, isUrgent = false }: CallbackMod
                 }
               </p>
             </div>
+
+            {/* Error message */}
+            {error && (
+              <div className="mb-4 p-3 bg-destructive/10 border border-destructive/20 rounded-lg text-destructive text-sm">
+                {error}
+              </div>
+            )}
 
             {/* Form */}
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -169,12 +195,16 @@ export function CallbackModal({ isOpen, onClose, isUrgent = false }: CallbackMod
                 disabled={isSubmitting}
                 className={`w-full ${isUrgent ? "bg-orange-500 hover:bg-orange-600" : "glow-blue-subtle"}`}
               >
-                {isSubmitting 
-                  ? "Отправка..." 
-                  : isUrgent 
-                    ? "Срочно перезвоните" 
-                    : "Заказать звонок"
-                }
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Отправка...
+                  </>
+                ) : isUrgent ? (
+                  "Срочно перезвоните"
+                ) : (
+                  "Заказать звонок"
+                )}
               </Button>
             </form>
 
@@ -195,5 +225,5 @@ export function CallbackModal({ isOpen, onClose, isUrgent = false }: CallbackMod
         )}
       </div>
     </div>
-  );
+  )
 }

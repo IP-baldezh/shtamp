@@ -2,7 +2,8 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { Phone, Mail, MapPin, Clock, Send, Building2, User, MessageSquare, ArrowRight } from "lucide-react"
+import { createClient } from "@/lib/supabase/client"
+import { Phone, Mail, MapPin, Clock, Send, Building2, User, MessageSquare, ArrowRight, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Header } from "@/components/layout/header"
@@ -18,12 +19,30 @@ export default function ContactPage() {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const supabase = createClient()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
-    await new Promise((resolve) => setTimeout(resolve, 1500))
+    setError(null)
+
+    const { error: insertError } = await supabase.from("contact_requests").insert({
+      name: formData.name,
+      company: formData.company || null,
+      phone: formData.phone,
+      email: formData.email || null,
+      message: formData.message,
+      request_type: "contact_form",
+    })
+
     setIsSubmitting(false)
+
+    if (insertError) {
+      setError("Произошла ошибка при отправке. Пожалуйста, попробуйте ещё раз.")
+      return
+    }
+
     setIsSubmitted(true)
   }
 
@@ -156,6 +175,12 @@ export default function ContactPage() {
                       </p>
                     </div>
                   ) : (
+                    {error && (
+                      <div className="mb-4 p-3 bg-destructive/10 border border-destructive/20 rounded-lg text-destructive text-sm">
+                        {error}
+                      </div>
+                    )}
+
                     <form onSubmit={handleSubmit} className="space-y-6">
                       <div className="grid gap-6 sm:grid-cols-2">
                         <div>
@@ -249,7 +274,14 @@ export default function ContactPage() {
                           disabled={isSubmitting}
                           className="glow-blue-subtle"
                         >
-                          {isSubmitting ? "Отправка..." : "Отправить сообщение"}
+                          {isSubmitting ? (
+                          <>
+                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                            Отправка...
+                          </>
+                        ) : (
+                          "Отправить сообщение"
+                        )}
                         </Button>
                       </div>
                     </form>

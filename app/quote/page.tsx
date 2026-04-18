@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import { createClient } from "@/lib/supabase/client"
 import {
   Phone,
   Mail,
@@ -18,6 +19,7 @@ import {
   Clock,
   ArrowRight,
   ArrowLeft,
+  Loader2,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -50,6 +52,8 @@ export default function QuotePage() {
   const [files, setFiles] = useState<File[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const supabase = createClient()
   const [formData, setFormData] = useState({
     name: "",
     company: "",
@@ -83,8 +87,31 @@ export default function QuotePage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
-    await new Promise((resolve) => setTimeout(resolve, 2000))
+    setError(null)
+
+    const { error: insertError } = await supabase.from("quote_requests").insert({
+      company: formData.company,
+      contact_person: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      product_type: selectedServices.map(s => {
+        const service = serviceOptions.find(opt => opt.id === s)
+        return service?.label || s
+      }).join(", "),
+      material: formData.description,
+      quantity: formData.quantity || null,
+      deadline: formData.deadline || selectedUrgency,
+      has_drawings: files.length > 0,
+      additional_info: formData.description,
+    })
+
     setIsSubmitting(false)
+
+    if (insertError) {
+      setError("Произошла ошибка при отправке. Пожалуйста, попробуйте ещё раз.")
+      return
+    }
+
     setIsSubmitted(true)
   }
 
@@ -520,6 +547,12 @@ export default function QuotePage() {
                     </div>
                   </div>
 
+                  {error && (
+                    <div className="mb-4 p-3 bg-destructive/10 border border-destructive/20 rounded-lg text-destructive text-sm">
+                      {error}
+                    </div>
+                  )}
+
                   <div className="mb-6 flex items-start gap-3">
                     <input
                       type="checkbox"
@@ -546,7 +579,14 @@ export default function QuotePage() {
                       disabled={isSubmitting || !formData.name || !formData.company || !formData.phone || !formData.email}
                       className="glow-blue-subtle"
                     >
-                      {isSubmitting ? "Отправка..." : "Отправить заявку"}
+                      {isSubmitting ? (
+                        <>
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                          Отправка...
+                        </>
+                      ) : (
+                        "Отправить заявку"
+                      )}
                     </Button>
                   </div>
                 </div>

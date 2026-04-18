@@ -1,131 +1,132 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import Link from "next/link";
-import { ArrowRight, Tag, Factory } from "lucide-react";
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
-import { CTASection } from "@/components/sections/cta";
+import { useState, useEffect } from "react"
+import Link from "next/link"
+import { createClient } from "@/lib/supabase/client"
+import { ArrowRight, Tag, Factory, Loader2 } from "lucide-react"
+import { Header } from "@/components/layout/header"
+import { Footer } from "@/components/layout/footer"
+import { CTASection } from "@/components/sections/cta"
 
-const cases = [
+interface CaseItem {
+  id: string
+  slug: string
+  title: string
+  client: string
+  industry: string
+  services: string[]
+  description: string
+  challenge: string
+  solution: string
+  results: string
+  image_url: string
+  status: string
+  featured: boolean
+}
+
+const industryLabels: Record<string, string> = {
+  automotive: "Автомобильная",
+  aerospace: "Авиакосмос",
+  electronics: "Электроника",
+  appliances: "Бытовая техника",
+  construction: "Строительство",
+  medical: "Медицина",
+  energy: "Энергетика",
+  defense: "ОПК",
+}
+
+const serviceLabels: Record<string, string> = {
+  stamps: "Штампы",
+  molds: "Пресс-формы",
+  design: "Проектирование",
+  repair: "Ремонт",
+}
+
+// Fallback static cases for demo
+const staticCases = [
   {
     id: "automotive-bracket-stamp",
+    slug: "automotive-bracket-stamp",
     title: "Штамп последовательного действия для кронштейнов подвески",
     client: "Крупный автопроизводитель",
-    industry: "Автомобильная",
-    type: "Последовательный штамп",
+    industry: "automotive",
+    services: ["stamps", "design"],
     description: "Разработка и изготовление 12-позиционного штампа для серийного производства кронштейнов подвески автомобиля.",
-    results: [
-      "Производительность: 60 ударов/мин",
-      "Ресурс: 2 000 000 деталей",
-      "Срок изготовления: 45 дней",
-    ],
-    specs: {
-      material: "Сталь 08кп, толщина 2 мм",
-      positions: "12 позиций",
-      dimensions: "800×600×450 мм",
-    },
+    challenge: "",
+    solution: "",
+    results: "Производительность: 60 ударов/мин, Ресурс: 2 000 000 деталей",
+    image_url: "",
+    status: "published",
+    featured: true,
   },
   {
     id: "electronics-housing-mold",
+    slug: "electronics-housing-mold",
     title: "Пресс-форма для корпусов электронных приборов",
     client: "Производитель электроники",
-    industry: "Электротехническая",
-    type: "Пресс-форма",
+    industry: "electronics",
+    services: ["molds", "design"],
     description: "Многоместная пресс-форма с горячеканальной системой для литья корпусов измерительных приборов.",
-    results: [
-      "4 гнезда",
-      "Цикл литья: 25 секунд",
-      "Ресурс: 500 000 циклов",
-    ],
-    specs: {
-      material: "ABS-пластик",
-      hotRunner: "YUDO",
-      dimensions: "500×400×380 мм",
-    },
-  },
-  {
-    id: "electrical-contacts-stamps",
-    title: "Комплект штампов для электрических контактов",
-    client: "Электротехнический завод",
-    industry: "Приборостроение",
-    type: "Комплект штампов",
-    description: "Серия из 8 штампов для вырубки и гибки электрических контактов различных типоразмеров.",
-    results: [
-      "8 типов деталей",
-      "Точность: ±0.02 мм",
-      "Производительность: 120 уд/мин",
-    ],
-    specs: {
-      material: "Латунь Л63, толщина 0.5 мм",
-      quantity: "8 штампов",
-      accuracy: "IT9",
-    },
+    challenge: "",
+    solution: "",
+    results: "4 гнезда, Цикл литья: 25 секунд, Ресурс: 500 000 циклов",
+    image_url: "",
+    status: "published",
+    featured: true,
   },
   {
     id: "appliance-panel-stamp",
+    slug: "appliance-panel-stamp",
     title: "Штамп для панелей бытовой техники",
     client: "Производитель бытовой техники",
-    industry: "Бытовая техника",
-    type: "Вытяжной штамп",
+    industry: "appliances",
+    services: ["stamps"],
     description: "Штамп для вытяжки декоративных панелей стиральных машин с последующей вырубкой отверстий.",
-    results: [
-      "Глубина вытяжки: 45 мм",
-      "Ресурс: 800 000 деталей",
-      "Срок изготовления: 60 дней",
-    ],
-    specs: {
-      material: "Сталь 08Ю, толщина 0.8 мм",
-      operations: "Вытяжка + пробивка",
-      dimensions: "1200×800×600 мм",
-    },
+    challenge: "",
+    solution: "",
+    results: "Глубина вытяжки: 45 мм, Ресурс: 800 000 деталей",
+    image_url: "",
+    status: "published",
+    featured: false,
   },
-  {
-    id: "aluminum-housing-mold",
-    title: "Пресс-форма для литья алюминиевых корпусов",
-    client: "Машиностроительный завод",
-    industry: "Машиностроение",
-    type: "Пресс-форма для МЛПД",
-    description: "Пресс-форма для литья под давлением корпусов редукторов из алюминиевого сплава.",
-    results: [
-      "Масса отливки: 1.2 кг",
-      "Ресурс: 80 000 циклов",
-      "Цикл: 45 секунд",
-    ],
-    specs: {
-      material: "АК12",
-      cooling: "Конформное охлаждение",
-      dimensions: "600×500×420 мм",
-    },
-  },
-  {
-    id: "progressive-die-fasteners",
-    title: "Штамп-автомат для крепежных элементов",
-    client: "Метизный завод",
-    industry: "Металлоизделия",
-    type: "Штамп-автомат",
-    description: "Высокоскоростной штамп для производства пружинных шайб и крепежных элементов.",
-    results: [
-      "Скорость: 200 уд/мин",
-      "Ресурс: 10 000 000 деталей",
-      "Автовыгрузка",
-    ],
-    specs: {
-      material: "Сталь 65Г, толщина 1.5 мм",
-      automation: "Автоподача + автовыгрузка",
-      dimensions: "400×350×300 мм",
-    },
-  },
-];
+]
 
-const industries = ["Все", "Автомобильная", "Электротехническая", "Приборостроение", "Бытовая техника", "Машиностроение", "Металлоизделия"];
+const industries = ["Все", "Автомобильная", "Авиакосмос", "Электроника", "Бытовая техника", "Строительство", "Медицина", "Энергетика", "ОПК"]
 
 export default function CasesPage() {
-  const [activeFilter, setActiveFilter] = useState("Все");
+  const [activeFilter, setActiveFilter] = useState("Все")
+  const [cases, setCases] = useState<CaseItem[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const supabase = createClient()
+
+  useEffect(() => {
+    const fetchCases = async () => {
+      const { data, error } = await supabase
+        .from("cases")
+        .select("*")
+        .eq("status", "published")
+        .order("featured", { ascending: false })
+        .order("created_at", { ascending: false })
+
+      if (error || !data || data.length === 0) {
+        // Use static cases as fallback
+        setCases(staticCases)
+      } else {
+        setCases(data)
+      }
+      setIsLoading(false)
+    }
+
+    fetchCases()
+  }, [supabase])
+
+  const getIndustryLabel = (industry: string) => {
+    return industryLabels[industry] || industry
+  }
 
   const filteredCases = activeFilter === "Все" 
     ? cases 
-    : cases.filter(c => c.industry === activeFilter);
+    : cases.filter(c => getIndustryLabel(c.industry) === activeFilter)
 
   return (
     <>
@@ -176,7 +177,11 @@ export default function CasesPage() {
         {/* Cases grid */}
         <section className="py-16">
           <div className="mx-auto max-w-7xl px-6">
-            {filteredCases.length === 0 ? (
+            {isLoading ? (
+              <div className="flex items-center justify-center py-16">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              </div>
+            ) : filteredCases.length === 0 ? (
               <div className="text-center py-16">
                 <Factory className="mx-auto h-16 w-16 text-muted-foreground mb-4" />
                 <h3 className="text-xl font-semibold text-foreground mb-2">Нет проектов в этой категории</h3>
@@ -187,17 +192,27 @@ export default function CasesPage() {
                 {filteredCases.map((caseItem) => (
                   <Link
                     key={caseItem.id}
-                    href={`/cases/${caseItem.id}`}
+                    href={`/cases/${caseItem.slug}`}
                     className="group cursor-pointer overflow-hidden rounded-2xl border border-border bg-card transition-all hover:border-primary/50 hover:shadow-xl"
                   >
-                    {/* Image placeholder */}
+                    {/* Image */}
                     <div className="relative aspect-video overflow-hidden bg-secondary">
-                      <div className="absolute inset-0 industrial-grid opacity-30" />
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="rounded-xl border border-border bg-card/80 p-4 backdrop-blur-sm">
-                          <Factory className="h-12 w-12 text-primary" />
-                        </div>
-                      </div>
+                      {caseItem.image_url ? (
+                        <img 
+                          src={caseItem.image_url} 
+                          alt={caseItem.title}
+                          className="w-full h-full object-cover transition-transform group-hover:scale-105"
+                        />
+                      ) : (
+                        <>
+                          <div className="absolute inset-0 industrial-grid opacity-30" />
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <div className="rounded-xl border border-border bg-card/80 p-4 backdrop-blur-sm">
+                              <Factory className="h-12 w-12 text-primary" />
+                            </div>
+                          </div>
+                        </>
+                      )}
                       <div className="absolute inset-0 bg-primary/5 opacity-0 transition-opacity group-hover:opacity-100" />
                     </div>
 
@@ -207,11 +222,13 @@ export default function CasesPage() {
                       <div className="mb-4 flex flex-wrap items-center gap-2">
                         <span className="flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
                           <Tag className="h-3 w-3" />
-                          {caseItem.industry}
+                          {getIndustryLabel(caseItem.industry)}
                         </span>
-                        <span className="rounded-full bg-secondary px-3 py-1 text-xs text-muted-foreground">
-                          {caseItem.type}
-                        </span>
+                        {caseItem.services?.map((service) => (
+                          <span key={service} className="rounded-full bg-secondary px-3 py-1 text-xs text-muted-foreground">
+                            {serviceLabels[service] || service}
+                          </span>
+                        ))}
                       </div>
 
                       {/* Title */}
@@ -224,15 +241,12 @@ export default function CasesPage() {
                         {caseItem.description}
                       </p>
 
-                      {/* Results */}
-                      <div className="mb-4 space-y-1">
-                        {caseItem.results.slice(0, 2).map((result) => (
-                          <div key={result} className="flex items-center gap-2 text-sm text-muted-foreground">
-                            <div className="h-1.5 w-1.5 rounded-full bg-primary" />
-                            {result}
-                          </div>
-                        ))}
-                      </div>
+                      {/* Client */}
+                      {caseItem.client && (
+                        <div className="mb-4 text-sm text-muted-foreground">
+                          Клиент: {caseItem.client}
+                        </div>
+                      )}
 
                       {/* Link */}
                       <div className="flex items-center gap-2 text-sm font-medium text-primary">
@@ -254,7 +268,7 @@ export default function CasesPage() {
               {[
                 { value: "500+", label: "Проектов выполнено" },
                 { value: "150+", label: "Довольных клиентов" },
-                { value: "6", label: "Отраслей" },
+                { value: "8", label: "Отраслей" },
                 { value: "99%", label: "Проектов в срок" },
               ].map((stat) => (
                 <div key={stat.label}>
@@ -270,5 +284,5 @@ export default function CasesPage() {
       </main>
       <Footer />
     </>
-  );
+  )
 }
