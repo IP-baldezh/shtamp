@@ -262,7 +262,7 @@ export default function EquipmentPage() {
               </p>
               <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
                 <Button size="lg" className="glow-blue-subtle" asChild>
-                  <Link href="/contacts">
+                  <Link href="/contact">
                     Записаться на экскурсию
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>

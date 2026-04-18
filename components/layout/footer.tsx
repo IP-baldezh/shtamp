@@ -68,7 +68,7 @@ export function Footer({ contact }: { contact?: FooterContactInfo }) {
                 </Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
-                <Link href="/contacts">Связаться с нами</Link>
+                <Link href="/contact">Связаться с нами</Link>
               </Button>
             </div>
           </div>

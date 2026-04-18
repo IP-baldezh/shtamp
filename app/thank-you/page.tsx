@@ -4,13 +4,15 @@ import { CheckCircle, Phone, Mail, ArrowRight, Clock, FileText, Users } from "lu
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { Button } from "@/components/ui/button";
+import { getCompanySettings, phoneToTel } from "@/lib/settings";
 
 export const metadata: Metadata = {
   title: "Спасибо за обращение | ШТАМП",
   description: "Ваша заявка успешно отправлена. Мы свяжемся с вами в ближайшее время.",
 };
 
-export default function ThankYouPage() {
+export default async function ThankYouPage() {
+  const settings = await getCompanySettings();
   return (
     <>
       <SiteHeader />
@@ -112,18 +114,18 @@ export default function ThankYouPage() {
                 </p>
                 <div className="flex flex-col justify-center gap-4 sm:flex-row">
                   <a
-                    href="tel:+74951234567"
+                    href={`tel:${phoneToTel(settings.phone)}`}
                     className="flex items-center justify-center gap-2 text-primary hover:underline"
                   >
                     <Phone className="h-4 w-4" />
-                    +7 (495) 123-45-67
+                    {settings.phone}
                   </a>
                   <a
-                    href="mailto:info@stamp.ru"
+                    href={`mailto:${settings.email}`}
                     className="flex items-center justify-center gap-2 text-primary hover:underline"
                   >
                     <Mail className="h-4 w-4" />
-                    info@stamp.ru
+                    {settings.email}
                   </a>
                 </div>
               </div>

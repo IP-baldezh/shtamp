@@ -4,8 +4,10 @@ import { Button } from "@/components/ui/button";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { ContactForm } from "./contact-form";
+import { getCompanySettings, phoneToTel } from "@/lib/settings";
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const settings = await getCompanySettings();
   return (
     <>
       <SiteHeader />
@@ -47,10 +49,10 @@ export default function ContactPage() {
                     <div>
                       <h3 className="mb-1 font-semibold text-foreground">Телефон</h3>
                       <a
-                        href="tel:+74951234567"
+                        href={`tel:${phoneToTel(settings.phone)}`}
                         className="text-lg font-medium text-primary hover:underline"
                       >
-                        +7 (495) 123-45-67
+                        {settings.phone}
                       </a>
                       <p className="mt-1 text-sm text-muted-foreground">Звоните в рабочее время</p>
                     </div>
@@ -62,10 +64,10 @@ export default function ContactPage() {
                     <div>
                       <h3 className="mb-1 font-semibold text-foreground">Email</h3>
                       <a
-                        href="mailto:info@stamp.ru"
+                        href={`mailto:${settings.email}`}
                         className="text-lg font-medium text-primary hover:underline"
                       >
-                        info@stamp.ru
+                        {settings.email}
                       </a>
                       <p className="mt-1 text-sm text-muted-foreground">
                         Ответим в течение 2 часов
@@ -78,7 +80,7 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <h3 className="mb-1 font-semibold text-foreground">Адрес</h3>
-                      <p className="text-foreground">г. Москва, ул. Промышленная, д. 15</p>
+                      <p className="text-foreground">{settings.address}</p>
                       <p className="mt-1 text-sm text-muted-foreground">
                         Производственный комплекс, корпус 2
                       </p>
@@ -90,7 +92,7 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <h3 className="mb-1 font-semibold text-foreground">Режим работы</h3>
-                      <p className="text-foreground">Пн-Пт: 9:00 — 18:00</p>
+                      <p className="text-foreground">{settings.hours}</p>
                       <p className="mt-1 text-sm text-muted-foreground">Сб-Вс: выходной</p>
                     </div>
                   </div>
@@ -99,7 +101,7 @@ export default function ContactPage() {
                   <div className="flex h-full items-center justify-center bg-secondary/30 text-center">
                     <div>
                       <MapPin className="mx-auto mb-2 h-12 w-12 text-muted-foreground" />
-                      <p className="text-muted-foreground">г. Москва, ул. Промышленная, д. 15</p>
+                      <p className="text-muted-foreground">{settings.address}</p>
                     </div>
                   </div>
                 </div>
@@ -125,8 +127,8 @@ export default function ContactPage() {
               {[
                 {
                   title: "Отдел продаж",
-                  phone: "+7 (495) 123-45-67",
-                  email: "sales@stamp.ru",
+                  phone: settings.phone,
+                  email: settings.email,
                   description: "Консультации, расчёт стоимости, оформление заказов",
                 },
                 {

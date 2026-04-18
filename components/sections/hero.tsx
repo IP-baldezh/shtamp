@@ -1,10 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { ArrowRight, Play, Shield, Clock, Award, AlertTriangle, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CallbackModal } from "@/components/modals/callback-modal";
+import { createClient } from "@/lib/supabase/client";
+import { defaultCompanySettings, phoneToTel } from "@/lib/settings";
+import type { CompanySettings } from "@/lib/settings";
 
 const badges = [
   { icon: Shield, text: "Гарантия качества" },
@@ -15,6 +18,19 @@ const badges = [
 export function HeroSection() {
   const [showCallbackModal, setShowCallbackModal] = useState(false);
   const [isUrgent, setIsUrgent] = useState(false);
+  const [contact, setContact] = useState<CompanySettings>(defaultCompanySettings);
+
+  useEffect(() => {
+    createClient()
+      .from("site_settings")
+      .select("value")
+      .eq("key", "company")
+      .single()
+      .then(({ data }) => {
+        if (data?.value)
+          setContact({ ...defaultCompanySettings, ...(data.value as Partial<CompanySettings>) });
+      });
+  }, []);
 
   const handleUrgentCall = () => {
     setIsUrgent(true);
@@ -28,7 +44,7 @@ export function HeroSection() {
         <div className="absolute inset-0 industrial-grid opacity-30" />
         <div className="absolute top-1/4 -right-40 h-80 w-80 rounded-full bg-primary/10 blur-3xl" />
         <div className="absolute bottom-1/4 -left-40 h-80 w-80 rounded-full bg-primary/5 blur-3xl" />
-        
+
         <div className="relative mx-auto max-w-7xl px-6">
           <div className="grid items-center gap-12 lg:grid-cols-2">
             {/* Content */}
@@ -56,9 +72,8 @@ export function HeroSection() {
                   <span className="text-balance">любой сложности</span>
                 </h1>
                 <p className="max-w-lg text-lg text-muted-foreground">
-                  Проектируем и изготавливаем штампы холодной штамповки, 
-                  пресс-формы для литья. Собственное производство в Москве 
-                  с парком современного оборудования.
+                  Проектируем и изготавливаем штампы холодной штамповки, пресс-формы для литья.
+                  Собственное производство в Москве с парком современного оборудования.
                 </p>
               </div>
 
@@ -87,17 +102,17 @@ export function HeroSection() {
                   <AlertTriangle className="h-4 w-4" />
                   <span className="text-sm font-medium">Срочный вызов</span>
                 </button>
-                <a 
-                  href="tel:+74951234567"
+                <a
+                  href={`tel:${phoneToTel(contact.phone)}`}
                   className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors"
                 >
                   <Phone className="h-4 w-4" />
-                  <span className="text-sm font-medium">+7 (495) 123-45-67</span>
+                  <span className="text-sm font-medium">{contact.phone}</span>
                 </a>
               </div>
 
               {/* Trust indicators */}
-              <div className="flex items-center gap-8 pt-4">
+              <div className="flex flex-wrap items-center gap-x-8 gap-y-4 pt-4">
                 <div>
                   <div className="text-3xl font-bold text-foreground">500+</div>
                   <div className="text-sm text-muted-foreground">Выполненных проектов</div>
@@ -125,17 +140,64 @@ export function HeroSection() {
                   <svg className="absolute inset-0 h-full w-full opacity-20" viewBox="0 0 400 400">
                     <defs>
                       <pattern id="tech-grid" width="20" height="20" patternUnits="userSpaceOnUse">
-                        <path d="M 20 0 L 0 0 0 20" fill="none" stroke="currentColor" strokeWidth="0.5" className="text-primary" />
+                        <path
+                          d="M 20 0 L 0 0 0 20"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="0.5"
+                          className="text-primary"
+                        />
                       </pattern>
                     </defs>
                     <rect width="400" height="400" fill="url(#tech-grid)" />
                     {/* Technical drawing elements */}
-                    <circle cx="200" cy="200" r="80" fill="none" stroke="currentColor" strokeWidth="1" className="text-primary" />
-                    <circle cx="200" cy="200" r="120" fill="none" stroke="currentColor" strokeWidth="0.5" className="text-primary" strokeDasharray="5,5" />
-                    <line x1="200" y1="50" x2="200" y2="350" stroke="currentColor" strokeWidth="0.5" className="text-primary" strokeDasharray="10,5" />
-                    <line x1="50" y1="200" x2="350" y2="200" stroke="currentColor" strokeWidth="0.5" className="text-primary" strokeDasharray="10,5" />
+                    <circle
+                      cx="200"
+                      cy="200"
+                      r="80"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1"
+                      className="text-primary"
+                    />
+                    <circle
+                      cx="200"
+                      cy="200"
+                      r="120"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="0.5"
+                      className="text-primary"
+                      strokeDasharray="5,5"
+                    />
+                    <line
+                      x1="200"
+                      y1="50"
+                      x2="200"
+                      y2="350"
+                      stroke="currentColor"
+                      strokeWidth="0.5"
+                      className="text-primary"
+                      strokeDasharray="10,5"
+                    />
+                    <line
+                      x1="50"
+                      y1="200"
+                      x2="350"
+                      y2="200"
+                      stroke="currentColor"
+                      strokeWidth="0.5"
+                      className="text-primary"
+                      strokeDasharray="10,5"
+                    />
                     {/* Dimension lines */}
-                    <path d="M 80 80 L 320 80 M 80 320 L 320 320" fill="none" stroke="currentColor" strokeWidth="1" className="text-primary/50" />
+                    <path
+                      d="M 80 80 L 320 80 M 80 320 L 320 320"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1"
+                      className="text-primary/50"
+                    />
                   </svg>
                   {/* Central element */}
                   <div className="absolute inset-0 flex items-center justify-center">
@@ -147,7 +209,7 @@ export function HeroSection() {
                     </div>
                   </div>
                 </div>
-                
+
                 {/* Floating cards */}
                 <div className="absolute -left-8 top-1/4 rounded-xl border border-border bg-card/90 p-4 shadow-xl backdrop-blur-sm">
                   <div className="flex items-center gap-3">
@@ -160,7 +222,7 @@ export function HeroSection() {
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="absolute -right-8 bottom-1/4 rounded-xl border border-border bg-card/90 p-4 shadow-xl backdrop-blur-sm">
                   <div className="flex items-center gap-3">
                     <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-green-500/20">
@@ -178,10 +240,11 @@ export function HeroSection() {
         </div>
       </section>
 
-      <CallbackModal 
-        isOpen={showCallbackModal} 
+      <CallbackModal
+        isOpen={showCallbackModal}
         onClose={() => setShowCallbackModal(false)}
         isUrgent={isUrgent}
+        phone={contact.phone}
       />
     </>
   );

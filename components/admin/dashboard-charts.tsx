@@ -36,13 +36,13 @@ interface TooltipEntry {
   color: string;
 }
 
-interface CustomTooltipProps {
+interface TooltipProps {
   active?: boolean;
   payload?: TooltipEntry[];
   label?: string;
 }
 
-const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
+const CustomTooltip = ({ active, payload, label }: TooltipProps) => {
   if (active && payload && payload.length) {
     return (
       <div className="rounded-lg border border-border bg-card p-3 shadow-lg">

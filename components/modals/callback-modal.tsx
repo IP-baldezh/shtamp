@@ -1,33 +1,39 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { createClient } from "@/lib/supabase/client"
-import { X, Phone, User, Building2, AlertTriangle, Loader2 } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { useState } from "react";
+import { createClient } from "@/lib/supabase/client";
+import { X, Phone, User, Building2, AlertTriangle, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 interface CallbackModalProps {
-  isOpen: boolean
-  onClose: () => void
-  isUrgent?: boolean
+  isOpen: boolean;
+  onClose: () => void;
+  isUrgent?: boolean;
+  phone?: string;
 }
 
-export function CallbackModal({ isOpen, onClose, isUrgent = false }: CallbackModalProps) {
+export function CallbackModal({
+  isOpen,
+  onClose,
+  isUrgent = false,
+  phone = "+7 (495) 123-45-67",
+}: CallbackModalProps) {
   const [formData, setFormData] = useState({
     name: "",
     company: "",
     phone: "",
     message: "",
-  })
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isSubmitted, setIsSubmitted] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const supabase = createClient()
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const supabase = createClient();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-    setError(null)
+    e.preventDefault();
+    setIsSubmitting(true);
+    setError(null);
 
     const { error: insertError } = await supabase.from("contact_requests").insert({
       name: formData.name,
@@ -36,39 +42,36 @@ export function CallbackModal({ isOpen, onClose, isUrgent = false }: CallbackMod
       message: formData.message || null,
       request_type: isUrgent ? "urgent_callback" : "callback",
       is_urgent: isUrgent,
-    })
+    });
 
-    setIsSubmitting(false)
+    setIsSubmitting(false);
 
     if (insertError) {
-      setError("Произошла ошибка. Попробуйте позвонить нам напрямую.")
-      return
+      setError("Произошла ошибка. Попробуйте позвонить нам напрямую.");
+      return;
     }
 
-    setIsSubmitted(true)
-  }
+    setIsSubmitted(true);
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value })
-  }
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const handleClose = () => {
-    setFormData({ name: "", company: "", phone: "", message: "" })
-    setIsSubmitted(false)
-    setError(null)
-    onClose()
-  }
+    setFormData({ name: "", company: "", phone: "", message: "" });
+    setIsSubmitted(false);
+    setError(null);
+    onClose();
+  };
 
-  if (!isOpen) return null
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center">
       {/* Backdrop */}
-      <div 
-        className="absolute inset-0 bg-background/80 backdrop-blur-sm"
-        onClick={handleClose}
-      />
-      
+      <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" onClick={handleClose} />
+
       {/* Modal */}
       <div className="relative z-10 w-full max-w-md mx-4 rounded-2xl border border-border bg-card p-6 shadow-2xl">
         {/* Close button */}
@@ -88,10 +91,9 @@ export function CallbackModal({ isOpen, onClose, isUrgent = false }: CallbackMod
               {isUrgent ? "Срочный запрос отправлен!" : "Заявка отправлена!"}
             </h3>
             <p className="text-muted-foreground mb-6">
-              {isUrgent 
+              {isUrgent
                 ? "Наш специалист перезвонит вам в течение 15 минут."
-                : "Мы свяжемся с вами в ближайшее время."
-              }
+                : "Мы свяжемся с вами в ближайшее время."}
             </p>
             <Button onClick={handleClose} variant="outline">
               Закрыть
@@ -111,10 +113,9 @@ export function CallbackModal({ isOpen, onClose, isUrgent = false }: CallbackMod
                 {isUrgent ? "Заказать срочный звонок" : "Заказать звонок"}
               </h2>
               <p className="mt-1 text-sm text-muted-foreground">
-                {isUrgent 
+                {isUrgent
                   ? "Перезвоним в течение 15 минут в рабочее время"
-                  : "Перезвоним в течение 2 часов в рабочее время"
-                }
+                  : "Перезвоним в течение 2 часов в рабочее время"}
               </p>
             </div>
 
@@ -210,20 +211,18 @@ export function CallbackModal({ isOpen, onClose, isUrgent = false }: CallbackMod
 
             {/* Direct call option */}
             <div className="mt-6 pt-4 border-t border-border text-center">
-              <p className="text-sm text-muted-foreground mb-2">
-                Или позвоните нам напрямую:
-              </p>
-              <a 
-                href="tel:+74951234567" 
+              <p className="text-sm text-muted-foreground mb-2">Или позвоните нам напрямую:</p>
+              <a
+                href={`tel:${phone.replace(/[^\d+]/g, "")}`}
                 className="inline-flex items-center gap-2 text-lg font-semibold text-primary hover:underline"
               >
                 <Phone className="h-5 w-5" />
-                +7 (495) 123-45-67
+                {phone}
               </a>
             </div>
           </>
         )}
       </div>
     </div>
-  )
+  );
 }

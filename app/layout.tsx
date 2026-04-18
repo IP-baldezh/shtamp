@@ -49,7 +49,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru" className="bg-background">
-      <body className={`${inter.variable} min-h-screen bg-background font-sans antialiased`}>
+      <body
+        className={`${inter.variable} min-h-screen overflow-x-hidden bg-background font-sans antialiased`}
+      >
         {children}
         <Toaster richColors position="top-right" />
         {process.env.NODE_ENV === "production" && <Analytics />}

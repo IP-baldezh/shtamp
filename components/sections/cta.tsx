@@ -1,14 +1,30 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { ArrowRight, Phone, Mail, MessageCircle, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CallbackModal } from "@/components/modals/callback-modal";
+import { createClient } from "@/lib/supabase/client";
+import { defaultCompanySettings } from "@/lib/settings";
+import type { CompanySettings } from "@/lib/settings";
 
 export function CTASection() {
   const [showCallbackModal, setShowCallbackModal] = useState(false);
   const [isUrgent, setIsUrgent] = useState(false);
+  const [contact, setContact] = useState<CompanySettings>(defaultCompanySettings);
+
+  useEffect(() => {
+    createClient()
+      .from("site_settings")
+      .select("value")
+      .eq("key", "company")
+      .single()
+      .then(({ data }) => {
+        if (data?.value)
+          setContact({ ...defaultCompanySettings, ...(data.value as Partial<CompanySettings>) });
+      });
+  }, []);
 
   const handleUrgentCall = () => {
     setIsUrgent(true);
@@ -26,11 +42,11 @@ export function CTASection() {
         {/* Background */}
         <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-primary/5" />
         <div className="absolute inset-0 industrial-grid opacity-20" />
-        
+
         {/* Decorative elements */}
         <div className="absolute top-0 right-0 h-96 w-96 rounded-full bg-primary/10 blur-3xl" />
         <div className="absolute bottom-0 left-0 h-96 w-96 rounded-full bg-primary/5 blur-3xl" />
-        
+
         <div className="relative mx-auto max-w-4xl px-6 text-center">
           {/* Badge */}
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-sm text-primary">
@@ -50,7 +66,7 @@ export function CTASection() {
 
           {/* Description */}
           <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
-            Отправьте заявку или позвоните нам. Мы проанализируем вашу задачу и предложим 
+            Отправьте заявку или позвоните нам. Мы проанализируем вашу задачу и предложим
             оптимальное решение в течение 1-2 рабочих дней.
           </p>
 
@@ -62,12 +78,7 @@ export function CTASection() {
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
-            <Button 
-              size="lg" 
-              variant="outline" 
-              className="min-w-48"
-              onClick={handleRegularCall}
-            >
+            <Button size="lg" variant="outline" className="min-w-48" onClick={handleRegularCall}>
               <Phone className="mr-2 h-4 w-4" />
               Позвонить сейчас
             </Button>
@@ -86,22 +97,24 @@ export function CTASection() {
 
           {/* Contact options */}
           <div className="mt-12 flex flex-col items-center justify-center gap-8 sm:flex-row">
-            <a 
-              href="mailto:info@stamp.ru" 
+            <a
+              href={`mailto:${contact.email}`}
               className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-primary"
             >
               <Mail className="h-5 w-5" />
-              info@stamp.ru
+              {contact.email}
             </a>
-            <a 
-              href="https://wa.me/74951234567" 
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-primary"
-            >
-              <MessageCircle className="h-5 w-5" />
-              WhatsApp
-            </a>
+            {contact.whatsapp && (
+              <a
+                href={`https://wa.me/${contact.whatsapp}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-primary"
+              >
+                <MessageCircle className="h-5 w-5" />
+                WhatsApp
+              </a>
+            )}
           </div>
 
           {/* Trust note */}
@@ -111,10 +124,11 @@ export function CTASection() {
         </div>
       </section>
 
-      <CallbackModal 
-        isOpen={showCallbackModal} 
+      <CallbackModal
+        isOpen={showCallbackModal}
         onClose={() => setShowCallbackModal(false)}
         isUrgent={isUrgent}
+        phone={contact.phone}
       />
     </>
   );
