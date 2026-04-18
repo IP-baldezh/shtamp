@@ -1,13 +1,13 @@
 import Link from "next/link";
-import { Phone, Mail, MapPin, Clock, ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Phone, Mail, MapPin, Clock } from "lucide-react";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { ContactForm } from "./contact-form";
-import { getCompanySettings, phoneToTel } from "@/lib/settings";
+import { SocialLinks } from "@/components/ui/social-links";
+import { getCompanySettings, getSocialLinks, phoneToTel } from "@/lib/settings";
 
 export default async function ContactPage() {
-  const settings = await getCompanySettings();
+  const [settings, socialLinks] = await Promise.all([getCompanySettings(), getSocialLinks()]);
   return (
     <>
       <SiteHeader />
@@ -97,6 +97,12 @@ export default async function ContactPage() {
                     </div>
                   </div>
                 </div>
+                {socialLinks.length > 0 && (
+                  <div className="mt-6 rounded-xl border border-border bg-card p-6">
+                    <h3 className="mb-4 font-semibold text-foreground">Мы в соцсетях</h3>
+                    <SocialLinks links={socialLinks} showLabel />
+                  </div>
+                )}
                 <div className="mt-8 aspect-video overflow-hidden rounded-xl border border-border bg-card">
                   <div className="flex h-full items-center justify-center bg-secondary/30 text-center">
                     <div>

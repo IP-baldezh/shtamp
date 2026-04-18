@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { Phone, Mail, MapPin, Clock, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { SocialLinks } from "@/components/ui/social-links";
+import type { SocialLink } from "@/lib/settings";
 
 export interface FooterContactInfo {
   phone: string;
@@ -40,7 +42,13 @@ const footerLinks = {
   },
 };
 
-export function Footer({ contact }: { contact?: FooterContactInfo }) {
+export function Footer({
+  contact,
+  socialLinks = [],
+}: {
+  contact?: FooterContactInfo;
+  socialLinks?: SocialLink[];
+}) {
   const phone = contact?.phone ?? "+7 (495) 123-45-67";
   const email = contact?.email ?? "info@stamp.ru";
   const address = contact?.address ?? "г. Москва, ул. Промышленная, 15";
@@ -117,6 +125,15 @@ export function Footer({ contact }: { contact?: FooterContactInfo }) {
                 {hours}
               </div>
             </div>
+            {/* Social links */}
+            {socialLinks.length > 0 && (
+              <div className="mt-6">
+                <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  Мы в соцсетях
+                </p>
+                <SocialLinks links={socialLinks} />
+              </div>
+            )}
           </div>
 
           {/* Links */}

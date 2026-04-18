@@ -2,28 +2,38 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { ArrowRight, Phone, Mail, MessageCircle, AlertTriangle } from "lucide-react";
+import { ArrowRight, Phone, Mail, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CallbackModal } from "@/components/modals/callback-modal";
+import { SocialIcon } from "@/components/ui/social-icon";
 import { createClient } from "@/lib/supabase/client";
-import { defaultCompanySettings } from "@/lib/settings";
-import type { CompanySettings } from "@/lib/settings";
+import { defaultCompanySettings, defaultSocialLinks } from "@/lib/settings";
+import type { CompanySettings, SocialLink } from "@/lib/settings";
 
 export function CTASection() {
   const [showCallbackModal, setShowCallbackModal] = useState(false);
   const [isUrgent, setIsUrgent] = useState(false);
   const [contact, setContact] = useState<CompanySettings>(defaultCompanySettings);
+  const [socialLinks, setSocialLinks] = useState<SocialLink[]>(defaultSocialLinks);
 
   useEffect(() => {
-    createClient()
-      .from("site_settings")
-      .select("value")
-      .eq("key", "company")
-      .single()
-      .then(({ data }) => {
-        if (data?.value)
-          setContact({ ...defaultCompanySettings, ...(data.value as Partial<CompanySettings>) });
-      });
+    const client = createClient();
+    Promise.all([
+      client.from("site_settings").select("value").eq("key", "company").single(),
+      client.from("site_settings").select("value").eq("key", "social").single(),
+    ]).then(([{ data: companyData }, { data: socialData }]) => {
+      if (companyData?.value)
+        setContact({
+          ...defaultCompanySettings,
+          ...(companyData.value as Partial<CompanySettings>),
+        });
+      if (socialData?.value) {
+        const v = socialData.value;
+        if (Array.isArray(v)) {
+          setSocialLinks((v as SocialLink[]).filter((l) => l.url?.trim()));
+        }
+      }
+    });
   }, []);
 
   const handleUrgentCall = () => {
@@ -96,7 +106,7 @@ export function CTASection() {
           </div>
 
           {/* Contact options */}
-          <div className="mt-12 flex flex-col items-center justify-center gap-8 sm:flex-row">
+          <div className="mt-12 flex flex-col items-center justify-center gap-6">
             <a
               href={`mailto:${contact.email}`}
               className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-primary"
@@ -104,16 +114,21 @@ export function CTASection() {
               <Mail className="h-5 w-5" />
               {contact.email}
             </a>
-            {contact.whatsapp && (
-              <a
-                href={`https://wa.me/${contact.whatsapp}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-primary"
-              >
-                <MessageCircle className="h-5 w-5" />
-                WhatsApp
-              </a>
+            {socialLinks.length > 0 && (
+              <div className="flex flex-wrap items-center justify-center gap-3">
+                {socialLinks.map((link, idx) => (
+                  <a
+                    key={idx}
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 rounded-lg border border-border bg-secondary/50 px-3 py-2 text-sm text-muted-foreground transition-colors hover:border-primary hover:bg-primary/10 hover:text-primary"
+                  >
+                    <SocialIcon icon={link.icon} className="h-4 w-4" />
+                    {link.label}
+                  </a>
+                ))}
+              </div>
             )}
           </div>
 

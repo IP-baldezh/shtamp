@@ -1,13 +1,13 @@
 import { createClient } from "@/lib/supabase/server";
+import { getSocialLinks } from "@/lib/settings";
 import { Footer } from "./footer";
 
 export async function SiteFooter() {
   const supabase = await createClient();
-  const { data: settingsRow } = await supabase
-    .from("site_settings")
-    .select("value")
-    .eq("key", "company")
-    .single();
+  const [{ data: settingsRow }, socialLinks] = await Promise.all([
+    supabase.from("site_settings").select("value").eq("key", "company").single(),
+    getSocialLinks(),
+  ]);
 
   const s = (settingsRow?.value as Record<string, string> | null) ?? {};
 
@@ -19,6 +19,7 @@ export async function SiteFooter() {
         address: s.address ?? "г. Москва, ул. Промышленная, 15",
         hours: s.hours ?? "Пн-Пт: 9:00 - 18:00",
       }}
+      socialLinks={socialLinks}
     />
   );
 }
