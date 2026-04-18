@@ -1,15 +1,11 @@
-import { Metadata } from "next";
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
-import { ArrowRight, Tag, Calendar, Factory } from "lucide-react";
+import { ArrowRight, Tag, Factory } from "lucide-react";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
-import { Button } from "@/components/ui/button";
 import { CTASection } from "@/components/sections/cta";
-
-export const metadata: Metadata = {
-  title: "Кейсы и реализованные проекты | ШТАМП",
-  description: "Примеры выполненных работ по изготовлению штампов и пресс-форм для различных отраслей промышленности.",
-};
 
 const cases = [
   {
@@ -125,6 +121,12 @@ const cases = [
 const industries = ["Все", "Автомобильная", "Электротехническая", "Приборостроение", "Бытовая техника", "Машиностроение", "Металлоизделия"];
 
 export default function CasesPage() {
+  const [activeFilter, setActiveFilter] = useState("Все");
+
+  const filteredCases = activeFilter === "Все" 
+    ? cases 
+    : cases.filter(c => c.industry === activeFilter);
+
   return (
     <>
       <Header />
@@ -154,11 +156,12 @@ export default function CasesPage() {
         <section className="py-8 border-b border-border">
           <div className="mx-auto max-w-7xl px-6">
             <div className="flex flex-wrap gap-2">
-              {industries.map((industry, index) => (
+              {industries.map((industry) => (
                 <button
                   key={industry}
-                  className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
-                    index === 0
+                  onClick={() => setActiveFilter(industry)}
+                  className={`cursor-pointer rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                    activeFilter === industry
                       ? "bg-primary text-primary-foreground"
                       : "bg-secondary text-muted-foreground hover:bg-secondary/80 hover:text-foreground"
                   }`}
@@ -173,66 +176,74 @@ export default function CasesPage() {
         {/* Cases grid */}
         <section className="py-16">
           <div className="mx-auto max-w-7xl px-6">
-            <div className="grid gap-8 lg:grid-cols-2">
-              {cases.map((caseItem) => (
-                <Link
-                  key={caseItem.id}
-                  href={`/cases/${caseItem.id}`}
-                  className="group overflow-hidden rounded-2xl border border-border bg-card transition-all hover:border-primary/50 hover:shadow-xl"
-                >
-                  {/* Image placeholder */}
-                  <div className="relative aspect-video overflow-hidden bg-secondary">
-                    <div className="absolute inset-0 industrial-grid opacity-30" />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="rounded-xl border border-border bg-card/80 p-4 backdrop-blur-sm">
-                        <Factory className="h-12 w-12 text-primary" />
+            {filteredCases.length === 0 ? (
+              <div className="text-center py-16">
+                <Factory className="mx-auto h-16 w-16 text-muted-foreground mb-4" />
+                <h3 className="text-xl font-semibold text-foreground mb-2">Нет проектов в этой категории</h3>
+                <p className="text-muted-foreground">Попробуйте выбрать другую отрасль</p>
+              </div>
+            ) : (
+              <div className="grid gap-8 lg:grid-cols-2">
+                {filteredCases.map((caseItem) => (
+                  <Link
+                    key={caseItem.id}
+                    href={`/cases/${caseItem.id}`}
+                    className="group cursor-pointer overflow-hidden rounded-2xl border border-border bg-card transition-all hover:border-primary/50 hover:shadow-xl"
+                  >
+                    {/* Image placeholder */}
+                    <div className="relative aspect-video overflow-hidden bg-secondary">
+                      <div className="absolute inset-0 industrial-grid opacity-30" />
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="rounded-xl border border-border bg-card/80 p-4 backdrop-blur-sm">
+                          <Factory className="h-12 w-12 text-primary" />
+                        </div>
+                      </div>
+                      <div className="absolute inset-0 bg-primary/5 opacity-0 transition-opacity group-hover:opacity-100" />
+                    </div>
+
+                    {/* Content */}
+                    <div className="p-6">
+                      {/* Tags */}
+                      <div className="mb-4 flex flex-wrap items-center gap-2">
+                        <span className="flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
+                          <Tag className="h-3 w-3" />
+                          {caseItem.industry}
+                        </span>
+                        <span className="rounded-full bg-secondary px-3 py-1 text-xs text-muted-foreground">
+                          {caseItem.type}
+                        </span>
+                      </div>
+
+                      {/* Title */}
+                      <h2 className="mb-3 text-xl font-bold text-foreground group-hover:text-primary transition-colors">
+                        {caseItem.title}
+                      </h2>
+
+                      {/* Description */}
+                      <p className="mb-4 text-muted-foreground line-clamp-2">
+                        {caseItem.description}
+                      </p>
+
+                      {/* Results */}
+                      <div className="mb-4 space-y-1">
+                        {caseItem.results.slice(0, 2).map((result) => (
+                          <div key={result} className="flex items-center gap-2 text-sm text-muted-foreground">
+                            <div className="h-1.5 w-1.5 rounded-full bg-primary" />
+                            {result}
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Link */}
+                      <div className="flex items-center gap-2 text-sm font-medium text-primary">
+                        Подробнее о проекте
+                        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                       </div>
                     </div>
-                    <div className="absolute inset-0 bg-primary/5 opacity-0 transition-opacity group-hover:opacity-100" />
-                  </div>
-
-                  {/* Content */}
-                  <div className="p-6">
-                    {/* Tags */}
-                    <div className="mb-4 flex flex-wrap items-center gap-2">
-                      <span className="flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
-                        <Tag className="h-3 w-3" />
-                        {caseItem.industry}
-                      </span>
-                      <span className="rounded-full bg-secondary px-3 py-1 text-xs text-muted-foreground">
-                        {caseItem.type}
-                      </span>
-                    </div>
-
-                    {/* Title */}
-                    <h2 className="mb-3 text-xl font-bold text-foreground group-hover:text-primary transition-colors">
-                      {caseItem.title}
-                    </h2>
-
-                    {/* Description */}
-                    <p className="mb-4 text-muted-foreground line-clamp-2">
-                      {caseItem.description}
-                    </p>
-
-                    {/* Results */}
-                    <div className="mb-4 space-y-1">
-                      {caseItem.results.slice(0, 2).map((result) => (
-                        <div key={result} className="flex items-center gap-2 text-sm text-muted-foreground">
-                          <div className="h-1.5 w-1.5 rounded-full bg-primary" />
-                          {result}
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Link */}
-                    <div className="flex items-center gap-2 text-sm font-medium text-primary">
-                      Подробнее о проекте
-                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
+                  </Link>
+                ))}
+              </div>
+            )}
           </div>
         </section>
 

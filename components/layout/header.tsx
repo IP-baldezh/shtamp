@@ -28,7 +28,7 @@ const navigation = {
   links: [
     { name: "Кейсы", href: "/cases" },
     { name: "Статьи", href: "/articles" },
-    { name: "Контакты", href: "/contacts" },
+    { name: "Контакты", href: "/contact" },
   ],
 };
 
@@ -139,7 +139,7 @@ export function Header() {
         {/* CTA buttons */}
         <div className="hidden items-center gap-3 lg:flex">
           <Button variant="ghost" size="sm" asChild>
-            <Link href="/contacts">Связаться</Link>
+            <Link href="/contact">Связаться</Link>
           </Button>
           <Button size="sm" className="glow-blue-subtle" asChild>
             <Link href="/quote">Запросить КП</Link>
@@ -197,7 +197,7 @@ export function Header() {
             ))}
             <div className="flex flex-col gap-2 pt-4">
               <Button variant="outline" asChild>
-                <Link href="/contacts">Связаться</Link>
+                <Link href="/contact">Связаться</Link>
               </Button>
               <Button asChild>
                 <Link href="/quote">Запросить КП</Link>
