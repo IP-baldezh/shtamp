@@ -14,3 +14,15 @@ next.user-config.*
 node_modules
 .next/
 .DS_Store
+
+# Logs
+migration.log
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Lock files (keep pnpm-lock.yaml, ignore npm)
+package-lock.json
+
+# OS
+Thumbs.db
