@@ -1,6 +1,7 @@
 import { unstable_noStore as noStore } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, Tag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -20,7 +21,7 @@ export async function CasesPreviewSection() {
   const supabase = await createClient();
   const { data: cases } = await supabase
     .from("cases")
-    .select("slug, title, client, industry, description, results, featured")
+    .select("slug, title, client, industry, description, results, featured, image_url")
     .eq("status", "published")
     .order("featured", { ascending: false })
     .order("created_at", { ascending: false })
@@ -62,12 +63,17 @@ export async function CasesPreviewSection() {
             >
               {/* Image */}
               <div className="relative aspect-[4/3] overflow-hidden bg-secondary">
-                <div className="absolute inset-0 industrial-grid opacity-30" />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="rounded-xl border border-border bg-card/80 p-6 backdrop-blur-sm">
-                    <span className="text-lg font-bold text-primary">КЕЙС</span>
-                  </div>
-                </div>
+                {caseItem.image_url ? (
+                  <Image
+                    src={caseItem.image_url}
+                    alt={caseItem.title}
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 33vw"
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                ) : (
+                  <div className="absolute inset-0 industrial-grid opacity-30" />
+                )}
                 <div className="absolute inset-0 bg-primary/10 opacity-0 transition-opacity group-hover:opacity-100" />
               </div>
 

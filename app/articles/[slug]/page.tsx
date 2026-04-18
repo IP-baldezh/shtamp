@@ -7,7 +7,7 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import { CTASection } from "@/components/sections/cta";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { articleSchema, breadcrumbSchema } from "@/lib/seo/schema";
+import { articleSchema } from "@/lib/seo/schema";
 import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 
 export const dynamic = "force-dynamic";
@@ -77,9 +77,8 @@ export default async function ArticleDetailPage({ params }: Props) {
 
   // Detect if content is HTML (TipTap output) or plain text
   const isHtml = article.content?.trimStart().startsWith("<");
-  const paragraphs = !isHtml && article.content
-    ? article.content.split("\n").filter((p: string) => p.trim())
-    : [];
+  const paragraphs =
+    !isHtml && article.content ? article.content.split("\n").filter((p: string) => p.trim()) : [];
 
   const jsonLd = articleSchema({
     title: article.title,

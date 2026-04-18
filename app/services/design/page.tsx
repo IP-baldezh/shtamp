@@ -14,7 +14,6 @@ import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { Button } from "@/components/ui/button";
 import { CTASection } from "@/components/sections/cta";
-import { serviceSchema, breadcrumbSchema } from "@/lib/seo/schema";
 import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 
 export const metadata: Metadata = {
@@ -112,7 +111,9 @@ export default function DesignServicePage() {
       <main className="pt-32">
         <section className="pb-4">
           <div className="mx-auto max-w-7xl px-6">
-            <Breadcrumbs items={[{ name: "Услуги", href: "/services" }, { name: "Проектирование" }]} />
+            <Breadcrumbs
+              items={[{ name: "Услуги", href: "/services" }, { name: "Проектирование" }]}
+            />
           </div>
         </section>
         {/* Hero section */}

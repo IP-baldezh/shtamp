@@ -18,8 +18,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/equipment" },
   openGraph: {
     title: "Оборудование производства | ШТАМП",
-    description:
-      "Парк современного оборудования: станки с ЧПУ, электроэрозионные станки, КИМ.",
+    description: "Парк современного оборудования: станки с ЧПУ, электроэрозионные станки, КИМ.",
     url: "/equipment",
     type: "website",
   },
@@ -169,9 +168,7 @@ export default async function EquipmentPage() {
         <section className="py-20">
           <div className="mx-auto max-w-7xl px-6">
             <div className="rounded-2xl border border-border bg-gradient-to-br from-primary/5 to-transparent p-8 md:p-12 text-center">
-              <h2 className="text-3xl font-bold text-foreground">
-                Хотите увидеть производство?
-              </h2>
+              <h2 className="text-3xl font-bold text-foreground">Хотите увидеть производство?</h2>
               <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
                 Приглашаем на экскурсию по нашему производственному комплексу. Покажем оборудование
                 и процессы изготовления.

@@ -33,8 +33,7 @@ export const metadata: Metadata = {
   creator: "ШТАМП",
   openGraph: {
     title: "ШТАМП — Производство штампов и пресс-форм",
-    description:
-      "Проектирование и изготовление штампов холодной штамповки, пресс-форм для литья",
+    description: "Проектирование и изготовление штампов холодной штамповки, пресс-форм для литья",
     url: "https://shtamp-pied.vercel.app",
     type: "website",
     locale: "ru_RU",
@@ -43,8 +42,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "ШТАМП — Производство штампов и пресс-форм",
-    description:
-      "Проектирование и изготовление штампов холодной штамповки, пресс-форм для литья",
+    description: "Проектирование и изготовление штампов холодной штамповки, пресс-форм для литья",
   },
   robots: {
     index: true,

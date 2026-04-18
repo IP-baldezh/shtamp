@@ -17,8 +17,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/articles" },
   openGraph: {
     title: "Статьи о штамповке и производстве оснастки | ШТАМП",
-    description:
-      "Полезные статьи о технологиях штамповки и проектировании штампов.",
+    description: "Полезные статьи о технологиях штамповки и проектировании штампов.",
     url: "/articles",
     type: "website",
   },

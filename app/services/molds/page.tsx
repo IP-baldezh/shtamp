@@ -5,7 +5,6 @@ import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { Button } from "@/components/ui/button";
 import { CTASection } from "@/components/sections/cta";
-import { serviceSchema, breadcrumbSchema } from "@/lib/seo/schema";
 import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 
 export const metadata: Metadata = {
@@ -15,8 +14,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/services/molds" },
   openGraph: {
     title: "Изготовление пресс-форм для литья | ШТАМП",
-    description:
-      "Производство пресс-форм для литья пластмасс под давлением и литья металлов.",
+    description: "Производство пресс-форм для литья пластмасс под давлением и литья металлов.",
     url: "/services/molds",
     type: "website",
   },

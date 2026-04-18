@@ -10,8 +10,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/quote" },
   openGraph: {
     title: "Запросить расчёт стоимости | ШТАМП",
-    description:
-      "Отправьте техническое задание и получите бесплатное коммерческое предложение.",
+    description: "Отправьте техническое задание и получите бесплатное коммерческое предложение.",
     url: "/quote",
     type: "website",
   },
