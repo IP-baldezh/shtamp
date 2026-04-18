@@ -175,13 +175,14 @@ export default function ContactPage() {
                       </p>
                     </div>
                   ) : (
-                    {error && (
-                      <div className="mb-4 p-3 bg-destructive/10 border border-destructive/20 rounded-lg text-destructive text-sm">
-                        {error}
-                      </div>
-                    )}
+                    <>
+                      {error && (
+                        <div className="mb-4 p-3 bg-destructive/10 border border-destructive/20 rounded-lg text-destructive text-sm">
+                          {error}
+                        </div>
+                      )}
 
-                    <form onSubmit={handleSubmit} className="space-y-6">
+                      <form onSubmit={handleSubmit} className="space-y-6">
                       <div className="grid gap-6 sm:grid-cols-2">
                         <div>
                           <label className="mb-2 flex items-center gap-2 text-sm font-medium text-foreground">
@@ -285,6 +286,7 @@ export default function ContactPage() {
                         </Button>
                       </div>
                     </form>
+                    </>
                   )}
                 </div>
               </div>
