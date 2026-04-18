@@ -1,7 +1,15 @@
-import Link from "next/link"
-import { ArrowRight, Wrench, PenTool, Settings, Package } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import CTA from "@/components/sections/cta"
+import { Metadata } from "next";
+import Link from "next/link";
+import { ArrowRight, Wrench, PenTool, Settings, Package } from "lucide-react";
+import { Header } from "@/components/layout/header";
+import { Footer } from "@/components/layout/footer";
+import { Button } from "@/components/ui/button";
+import { CTASection } from "@/components/sections/cta";
+
+export const metadata: Metadata = {
+  title: "Услуги | ШТАМП",
+  description: "Изготовление штампов, пресс-форм, проектирование оснастки, ремонт и модернизация. Полный цикл производства штамповой оснастки.",
+};
 
 const services = [
   {
@@ -18,14 +26,14 @@ const services = [
       "Штампы последовательного действия",
       "Штампы совмещённого действия",
     ],
-    stats: { value: "500+", label: "штампов в год" },
+    stats: { value: "500+", label: "проектов в год" },
   },
   {
     icon: Package,
     title: "Пресс-формы",
     slug: "molds",
     description:
-      "Разработка и изготовление пресс-форм для литья пластмасс, резинотехнических изделий и порошковой металлургии.",
+      "Разработка и изготовление пресс-форм для литья пластмасс, резинотехнических изделий и литья металлов под давлением.",
     features: [
       "Пресс-формы для литья пластмасс",
       "Формы для РТИ",
@@ -68,141 +76,134 @@ const services = [
     ],
     stats: { value: "48ч", label: "срочный ремонт" },
   },
-]
-
-export const metadata = {
-  title: "Услуги | СтампМастер",
-  description:
-    "Изготовление штампов, пресс-форм, проектирование оснастки, ремонт и модернизация. Полный цикл производства штамповой оснастки.",
-}
+];
 
 export default function ServicesPage() {
   return (
-    <main className="min-h-screen bg-background">
-      {/* Hero */}
-      <section className="relative bg-surface py-20 lg:py-28">
-        <div className="absolute inset-0 opacity-5">
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage: `radial-gradient(circle at 1px 1px, currentColor 1px, transparent 0)`,
-              backgroundSize: "40px 40px",
-            }}
-          />
-        </div>
-        <div className="container relative mx-auto px-4">
-          <div className="mx-auto max-w-3xl text-center">
-            <nav className="mb-6 flex items-center justify-center gap-2 text-sm text-muted">
-              <Link href="/" className="hover:text-accent transition-colors">
-                Главная
-              </Link>
-              <span>/</span>
-              <span className="text-foreground">Услуги</span>
-            </nav>
-            <h1 className="mb-6 text-4xl font-bold tracking-tight text-foreground lg:text-5xl">
-              Наши услуги
-            </h1>
-            <p className="text-lg text-muted lg:text-xl">
-              Полный цикл производства штамповой оснастки — от проектирования до серийного
-              изготовления и сервисного обслуживания.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Services List */}
-      <section className="py-16 lg:py-24">
-        <div className="container mx-auto px-4">
-          <div className="space-y-12">
-            {services.map((service, index) => {
-              const Icon = service.icon
-              const isEven = index % 2 === 0
-              return (
-                <div
-                  key={service.slug}
-                  className={`flex flex-col gap-8 rounded-2xl border border-border bg-surface p-8 lg:flex-row lg:items-center lg:gap-16 lg:p-12 ${
-                    isEven ? "" : "lg:flex-row-reverse"
-                  }`}
-                >
-                  {/* Content */}
-                  <div className="flex-1">
-                    <div className="mb-6 flex items-center gap-4">
-                      <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-accent/10">
-                        <Icon className="h-7 w-7 text-accent" />
-                      </div>
-                      <span className="text-4xl font-bold text-surface-light">
-                        {String(index + 1).padStart(2, "0")}
-                      </span>
-                    </div>
-
-                    <h2 className="mb-4 text-2xl font-bold text-foreground lg:text-3xl">
-                      {service.title}
-                    </h2>
-                    <p className="mb-6 text-lg text-muted">{service.description}</p>
-
-                    <div className="mb-8 grid gap-2 sm:grid-cols-2">
-                      {service.features.map((feature, i) => (
-                        <div key={i} className="flex items-center gap-2">
-                          <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-                          <span className="text-foreground">{feature}</span>
-                        </div>
-                      ))}
-                    </div>
-
-                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-                      <Button asChild className="bg-accent text-white hover:bg-accent/90">
-                        <Link href={`/services/${service.slug}`}>
-                          Подробнее
-                          <ArrowRight className="ml-2 h-4 w-4" />
-                        </Link>
-                      </Button>
-                      <Button asChild variant="outline" className="border-border">
-                        <Link href="/quote">Запросить расчёт</Link>
-                      </Button>
-                    </div>
-                  </div>
-
-                  {/* Stats Card */}
-                  <div className="flex shrink-0 flex-col items-center justify-center rounded-xl bg-accent/10 p-8 text-center lg:h-64 lg:w-64">
-                    <div className="mb-2 text-5xl font-bold text-accent lg:text-6xl">
-                      {service.stats.value}
-                    </div>
-                    <div className="text-muted">{service.stats.label}</div>
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Why Us */}
-      <section className="border-y border-border bg-surface py-16 lg:py-24">
-        <div className="container mx-auto px-4">
-          <h2 className="mb-12 text-center text-2xl font-bold text-foreground lg:text-3xl">
-            Почему выбирают нас
-          </h2>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {[
-              { value: "25+", label: "Лет на рынке", desc: "Опыт с 1998 года" },
-              { value: "1500+", label: "Проектов", desc: "Реализовано успешно" },
-              { value: "±0.01", label: "мм точность", desc: "Прецизионное оборудование" },
-              { value: "100%", label: "Гарантия", desc: "На всю продукцию" },
-            ].map((item, index) => (
-              <div
-                key={index}
-                className="rounded-xl border border-border bg-background p-6 text-center"
-              >
-                <div className="mb-2 text-3xl font-bold text-accent">{item.value}</div>
-                <div className="mb-1 font-semibold text-foreground">{item.label}</div>
-                <div className="text-sm text-muted">{item.desc}</div>
+    <>
+      <Header />
+      <main className="min-h-screen bg-background pt-32">
+        {/* Hero */}
+        <section className="relative pb-16">
+          <div className="absolute inset-0 industrial-grid opacity-20" />
+          <div className="relative mx-auto max-w-7xl px-6">
+            <div className="mx-auto max-w-3xl text-center">
+              <nav className="mb-6 flex items-center justify-center gap-2 text-sm text-muted-foreground">
+                <Link href="/" className="hover:text-primary transition-colors">
+                  Главная
+                </Link>
+                <span>/</span>
+                <span className="text-foreground">Услуги</span>
+              </nav>
+              <div className="mb-4 text-sm font-semibold uppercase tracking-wider text-primary">
+                Услуги
               </div>
-            ))}
+              <h1 className="mb-6 text-4xl font-bold tracking-tight text-foreground lg:text-5xl">
+                Наши услуги
+              </h1>
+              <p className="text-lg text-muted-foreground">
+                Полный цикл производства штамповой оснастки — от проектирования до серийного
+                изготовления и сервисного обслуживания.
+              </p>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <CTA />
-    </main>
-  )
+        {/* Services List */}
+        <section className="py-16">
+          <div className="mx-auto max-w-7xl px-6">
+            <div className="space-y-12">
+              {services.map((service, index) => {
+                const Icon = service.icon
+                const isEven = index % 2 === 0
+                return (
+                  <div
+                    key={service.slug}
+                    className={`flex flex-col gap-8 rounded-2xl border border-border bg-card p-8 lg:flex-row lg:items-center lg:gap-16 lg:p-12 ${
+                      isEven ? "" : "lg:flex-row-reverse"
+                    }`}
+                  >
+                    {/* Content */}
+                    <div className="flex-1">
+                      <div className="mb-6 flex items-center gap-4">
+                        <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10">
+                          <Icon className="h-7 w-7 text-primary" />
+                        </div>
+                        <span className="text-4xl font-bold text-secondary">
+                          {String(index + 1).padStart(2, "0")}
+                        </span>
+                      </div>
+
+                      <h2 className="mb-4 text-2xl font-bold text-foreground lg:text-3xl">
+                        {service.title}
+                      </h2>
+                      <p className="mb-6 text-lg text-muted-foreground">{service.description}</p>
+
+                      <div className="mb-8 grid gap-2 sm:grid-cols-2">
+                        {service.features.map((feature, i) => (
+                          <div key={i} className="flex items-center gap-2">
+                            <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+                            <span className="text-foreground">{feature}</span>
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+                        <Button asChild className="glow-blue-subtle">
+                          <Link href={`/services/${service.slug}`}>
+                            Подробнее
+                            <ArrowRight className="ml-2 h-4 w-4" />
+                          </Link>
+                        </Button>
+                        <Button asChild variant="outline">
+                          <Link href="/quote">Запросить расчёт</Link>
+                        </Button>
+                      </div>
+                    </div>
+
+                    {/* Stats Card */}
+                    <div className="flex shrink-0 flex-col items-center justify-center rounded-xl bg-primary/10 p-8 text-center lg:h-64 lg:w-64">
+                      <div className="mb-2 text-5xl font-bold text-primary lg:text-6xl">
+                        {service.stats.value}
+                      </div>
+                      <div className="text-muted-foreground">{service.stats.label}</div>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* Why Us */}
+        <section className="border-y border-border bg-secondary/30 py-16">
+          <div className="mx-auto max-w-7xl px-6">
+            <h2 className="mb-12 text-center text-2xl font-bold text-foreground lg:text-3xl">
+              Почему выбирают нас
+            </h2>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {[
+                { value: "18+", label: "Лет на рынке", desc: "Опыт с 2006 года" },
+                { value: "500+", label: "Проектов", desc: "Реализовано успешно" },
+                { value: "±0.01", label: "мм точность", desc: "Прецизионное оборудование" },
+                { value: "100%", label: "Гарантия", desc: "На всю продукцию" },
+              ].map((item, index) => (
+                <div
+                  key={index}
+                  className="rounded-xl border border-border bg-card p-6 text-center"
+                >
+                  <div className="mb-2 text-3xl font-bold text-primary">{item.value}</div>
+                  <div className="mb-1 font-semibold text-foreground">{item.label}</div>
+                  <div className="text-sm text-muted-foreground">{item.desc}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <CTASection />
+      </main>
+      <Footer />
+    </>
+  );
 }
