@@ -2,6 +2,13 @@ import Link from "next/link";
 import { Phone, Mail, MapPin, Clock, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+export interface FooterContactInfo {
+  phone: string;
+  email: string;
+  address: string;
+  hours: string;
+}
+
 const footerLinks = {
   services: {
     title: "Услуги",
@@ -33,7 +40,12 @@ const footerLinks = {
   },
 };
 
-export function Footer() {
+export function Footer({ contact }: { contact?: FooterContactInfo }) {
+  const phone = contact?.phone ?? "+7 (495) 123-45-67";
+  const email = contact?.email ?? "info@stamp.ru";
+  const address = contact?.address ?? "г. Москва, ул. Промышленная, 15";
+  const hours = contact?.hours ?? "Пн-Пт: 9:00 - 18:00";
+
   return (
     <footer className="border-t border-border bg-card">
       {/* CTA Section */}
@@ -78,25 +90,31 @@ export function Footer() {
               </div>
             </Link>
             <p className="mt-4 max-w-sm text-sm text-muted-foreground">
-              Проектирование и изготовление штампов холодной штамповки, пресс-форм для литья. 
-              Более 18 лет опыта в металлообработке.
+              Проектирование и изготовление штампов холодной штамповки, пресс-форм для литья. Более
+              18 лет опыта в металлообработке.
             </p>
             <div className="mt-6 space-y-3">
-              <a href="tel:+74951234567" className="flex items-center gap-3 text-sm text-foreground transition-colors hover:text-primary">
+              <a
+                href={`tel:${phone.replace(/\D/g, "")}`}
+                className="flex items-center gap-3 text-sm text-foreground transition-colors hover:text-primary"
+              >
                 <Phone className="h-4 w-4 text-primary" />
-                +7 (495) 123-45-67
+                {phone}
               </a>
-              <a href="mailto:info@stamp.ru" className="flex items-center gap-3 text-sm text-foreground transition-colors hover:text-primary">
+              <a
+                href={`mailto:${email}`}
+                className="flex items-center gap-3 text-sm text-foreground transition-colors hover:text-primary"
+              >
                 <Mail className="h-4 w-4 text-primary" />
-                info@stamp.ru
+                {email}
               </a>
               <div className="flex items-center gap-3 text-sm text-muted-foreground">
                 <MapPin className="h-4 w-4 text-primary" />
-                г. Москва, ул. Промышленная, 15
+                {address}
               </div>
               <div className="flex items-center gap-3 text-sm text-muted-foreground">
                 <Clock className="h-4 w-4 text-primary" />
-                Пн-Пт: 9:00 - 18:00
+                {hours}
               </div>
             </div>
           </div>
@@ -109,7 +127,10 @@ export function Footer() {
             <ul className="space-y-3">
               {footerLinks.services.links.map((link) => (
                 <li key={link.name}>
-                  <Link href={link.href} className="text-sm text-muted-foreground transition-colors hover:text-primary">
+                  <Link
+                    href={link.href}
+                    className="text-sm text-muted-foreground transition-colors hover:text-primary"
+                  >
                     {link.name}
                   </Link>
                 </li>
@@ -124,7 +145,10 @@ export function Footer() {
             <ul className="space-y-3">
               {footerLinks.company.links.map((link) => (
                 <li key={link.name}>
-                  <Link href={link.href} className="text-sm text-muted-foreground transition-colors hover:text-primary">
+                  <Link
+                    href={link.href}
+                    className="text-sm text-muted-foreground transition-colors hover:text-primary"
+                  >
                     {link.name}
                   </Link>
                 </li>
@@ -139,7 +163,10 @@ export function Footer() {
             <ul className="space-y-3">
               {footerLinks.industries.links.map((link) => (
                 <li key={link.name}>
-                  <Link href={link.href} className="text-sm text-muted-foreground transition-colors hover:text-primary">
+                  <Link
+                    href={link.href}
+                    className="text-sm text-muted-foreground transition-colors hover:text-primary"
+                  >
                     {link.name}
                   </Link>
                 </li>
@@ -152,14 +179,18 @@ export function Footer() {
       {/* Bottom bar */}
       <div className="border-t border-border">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-6 py-6 md:flex-row">
-          <p className="text-sm text-muted-foreground">
-            © 2024 ШТАМП. Все права защищены.
-          </p>
+          <p className="text-sm text-muted-foreground">© 2024 ШТАМП. Все права защищены.</p>
           <div className="flex gap-6">
-            <Link href="/privacy" className="text-sm text-muted-foreground transition-colors hover:text-primary">
+            <Link
+              href="/privacy"
+              className="text-sm text-muted-foreground transition-colors hover:text-primary"
+            >
               Политика конфиденциальности
             </Link>
-            <Link href="/terms" className="text-sm text-muted-foreground transition-colors hover:text-primary">
+            <Link
+              href="/terms"
+              className="text-sm text-muted-foreground transition-colors hover:text-primary"
+            >
               Условия использования
             </Link>
           </div>

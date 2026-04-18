@@ -1,10 +1,11 @@
-import { createClient } from "@/lib/supabase/server"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { FolderKanban, FileText, MessageSquare, FileQuestion, Eye, Clock } from "lucide-react"
-import Link from "next/link"
+import { createClient } from "@/lib/supabase/server";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { FolderKanban, FileText, MessageSquare, FileQuestion, Clock } from "lucide-react";
+import Link from "next/link";
+import { DashboardCharts } from "@/components/admin/dashboard-charts";
 
 export default async function AdminDashboardPage() {
-  const supabase = await createClient()
+  const supabase = await createClient();
 
   // Fetch counts
   const [
@@ -19,22 +20,87 @@ export default async function AdminDashboardPage() {
     supabase.from("articles").select("*", { count: "exact", head: true }),
     supabase.from("contact_requests").select("*", { count: "exact", head: true }),
     supabase.from("quote_requests").select("*", { count: "exact", head: true }),
-    supabase.from("contact_requests").select("*", { count: "exact", head: true }).eq("is_read", false),
-    supabase.from("quote_requests").select("*", { count: "exact", head: true }).eq("is_read", false),
-  ])
+    supabase
+      .from("contact_requests")
+      .select("*", { count: "exact", head: true })
+      .eq("is_read", false),
+    supabase
+      .from("quote_requests")
+      .select("*", { count: "exact", head: true })
+      .eq("is_read", false),
+  ]);
 
   // Fetch recent requests
   const { data: recentContacts } = await supabase
     .from("contact_requests")
     .select("*")
     .order("created_at", { ascending: false })
-    .limit(5)
+    .limit(5);
 
   const { data: recentQuotes } = await supabase
     .from("quote_requests")
     .select("*")
     .order("created_at", { ascending: false })
-    .limit(5)
+    .limit(5);
+
+  // Build chart data: requests per day for last 30 days
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+  const { data: contactsRaw } = await supabase
+    .from("contact_requests")
+    .select("created_at")
+    .gte("created_at", thirtyDaysAgo.toISOString());
+
+  const { data: quotesRaw } = await supabase
+    .from("quote_requests")
+    .select("created_at")
+    .gte("created_at", thirtyDaysAgo.toISOString());
+
+  // Group by day (last 14 days for readability)
+  const dayMap: Record<string, { contacts: number; quotes: number }> = {};
+  for (let i = 13; i >= 0; i--) {
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+    const key = d.toLocaleDateString("ru-RU", {
+      day: "2-digit",
+      month: "2-digit",
+    });
+    dayMap[key] = { contacts: 0, quotes: 0 };
+  }
+  contactsRaw?.forEach((r) => {
+    const key = new Date(r.created_at).toLocaleDateString("ru-RU", {
+      day: "2-digit",
+      month: "2-digit",
+    });
+    if (dayMap[key]) dayMap[key].contacts++;
+  });
+  quotesRaw?.forEach((r) => {
+    const key = new Date(r.created_at).toLocaleDateString("ru-RU", {
+      day: "2-digit",
+      month: "2-digit",
+    });
+    if (dayMap[key]) dayMap[key].quotes++;
+  });
+  const requestsByDay = Object.entries(dayMap).map(([date, v]) => ({
+    date,
+    ...v,
+  }));
+
+  // Content stats by status
+  const { data: casesByStatus } = await supabase.from("cases").select("status");
+  const { data: articlesByStatus } = await supabase.from("articles").select("status");
+  const statusLabels: Record<string, string> = {
+    published: "Опубликовано",
+    draft: "Черновики",
+    archived: "Архив",
+  };
+  const statusKeys = ["published", "draft", "archived"];
+  const contentStats = statusKeys.map((s) => ({
+    name: statusLabels[s] ?? s,
+    cases: casesByStatus?.filter((c) => c.status === s).length ?? 0,
+    articles: articlesByStatus?.filter((a) => a.status === s).length ?? 0,
+  }));
 
   const stats = [
     {
@@ -67,15 +133,13 @@ export default async function AdminDashboardPage() {
       href: "/admin/quotes",
       color: "bg-purple-500",
     },
-  ]
+  ];
 
   return (
     <div className="space-y-8">
       <div>
         <h1 className="text-2xl font-bold text-foreground">Обзор</h1>
-        <p className="text-muted-foreground">
-          Добро пожаловать в панель управления сайтом
-        </p>
+        <p className="text-muted-foreground">Добро пожаловать в панель управления сайтом</p>
       </div>
 
       {/* Stats */}
@@ -106,16 +170,16 @@ export default async function AdminDashboardPage() {
         ))}
       </div>
 
+      {/* Charts */}
+      <DashboardCharts requestsByDay={requestsByDay} contentStats={contentStats} />
+
       {/* Recent activity */}
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Recent contact requests */}
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle className="text-lg">Последние заявки</CardTitle>
-            <Link
-              href="/admin/requests"
-              className="text-sm text-primary hover:underline"
-            >
+            <Link href="/admin/requests" className="text-sm text-primary hover:underline">
               Все заявки
             </Link>
           </CardHeader>
@@ -129,21 +193,15 @@ export default async function AdminDashboardPage() {
                   >
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <p className="font-medium text-foreground truncate">
-                          {contact.name}
-                        </p>
-                        {!contact.is_read && (
-                          <span className="w-2 h-2 bg-primary rounded-full" />
-                        )}
+                        <p className="font-medium text-foreground truncate">{contact.name}</p>
+                        {!contact.is_read && <span className="w-2 h-2 bg-primary rounded-full" />}
                         {contact.is_urgent && (
                           <span className="px-1.5 py-0.5 text-xs bg-destructive text-destructive-foreground rounded">
                             Срочно
                           </span>
                         )}
                       </div>
-                      <p className="text-sm text-muted-foreground truncate">
-                        {contact.phone}
-                      </p>
+                      <p className="text-sm text-muted-foreground truncate">{contact.phone}</p>
                     </div>
                     <div className="flex items-center gap-1 text-xs text-muted-foreground">
                       <Clock className="w-3 h-3" />
@@ -153,9 +211,7 @@ export default async function AdminDashboardPage() {
                 ))}
               </div>
             ) : (
-              <p className="text-center text-muted-foreground py-8">
-                Нет заявок
-              </p>
+              <p className="text-center text-muted-foreground py-8">Нет заявок</p>
             )}
           </CardContent>
         </Card>
@@ -164,10 +220,7 @@ export default async function AdminDashboardPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle className="text-lg">Последние запросы КП</CardTitle>
-            <Link
-              href="/admin/quotes"
-              className="text-sm text-primary hover:underline"
-            >
+            <Link href="/admin/quotes" className="text-sm text-primary hover:underline">
               Все запросы
             </Link>
           </CardHeader>
@@ -181,12 +234,8 @@ export default async function AdminDashboardPage() {
                   >
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <p className="font-medium text-foreground truncate">
-                          {quote.company}
-                        </p>
-                        {!quote.is_read && (
-                          <span className="w-2 h-2 bg-primary rounded-full" />
-                        )}
+                        <p className="font-medium text-foreground truncate">{quote.company}</p>
+                        {!quote.is_read && <span className="w-2 h-2 bg-primary rounded-full" />}
                       </div>
                       <p className="text-sm text-muted-foreground truncate">
                         {quote.contact_person} • {quote.product_type}
@@ -200,13 +249,11 @@ export default async function AdminDashboardPage() {
                 ))}
               </div>
             ) : (
-              <p className="text-center text-muted-foreground py-8">
-                Нет запросов КП
-              </p>
+              <p className="text-center text-muted-foreground py-8">Нет запросов КП</p>
             )}
           </CardContent>
         </Card>
       </div>
     </div>
-  )
+  );
 }

@@ -1,41 +1,31 @@
+import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
-import { ArrowRight, Calendar, Tag } from "lucide-react";
+import { ArrowRight, Tag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-const cases = [
-  {
-    id: 1,
-    title: "Штамп последовательного действия для автомобильных деталей",
-    client: "Крупный автопроизводитель",
-    industry: "Автомобильная",
-    description: "Разработка и изготовление 12-позиционного штампа для производства кронштейнов подвески.",
-    results: ["Производительность: 60 уд/мин", "Ресурс: 2 млн деталей", "Срок изготовления: 45 дней"],
-    image: "/cases/case-1.jpg",
-    href: "/cases/automotive-bracket-stamp",
-  },
-  {
-    id: 2,
-    title: "Пресс-форма для литья корпусных деталей",
-    client: "Производитель электроники",
-    industry: "Электротехническая",
-    description: "Многоместная пресс-форма с горячеканальной системой для литья корпусов приборов.",
-    results: ["4 гнезда", "Цикл: 25 секунд", "Ресурс: 500 000 циклов"],
-    image: "/cases/case-2.jpg",
-    href: "/cases/electronics-housing-mold",
-  },
-  {
-    id: 3,
-    title: "Комплект штампов для производства контактов",
-    client: "Электротехнический завод",
-    industry: "Приборостроение",
-    description: "Серия штампов для вырубки и гибки электрических контактов различных типоразмеров.",
-    results: ["8 типов деталей", "Точность: ±0.02 мм", "Производительность: 120 уд/мин"],
-    image: "/cases/case-3.jpg",
-    href: "/cases/electrical-contacts-stamps",
-  },
-];
+const industryLabels: Record<string, string> = {
+  automotive: "Автомобильная",
+  aerospace: "Авиакосмос",
+  electronics: "Электроника",
+  appliances: "Бытовая техника",
+  construction: "Строительство",
+  medical: "Медицина",
+  energy: "Энергетика",
+  defense: "ОПК",
+};
 
-export function CasesPreviewSection() {
+export async function CasesPreviewSection() {
+  const supabase = await createClient();
+  const { data: cases } = await supabase
+    .from("cases")
+    .select("slug, title, client, industry, description, results")
+    .eq("status", "published")
+    .eq("featured", true)
+    .order("created_at", { ascending: false })
+    .limit(3);
+
+  if (!cases || cases.length === 0) return null;
+
   return (
     <section className="relative py-24">
       <div className="mx-auto max-w-7xl px-6">
@@ -64,8 +54,8 @@ export function CasesPreviewSection() {
         <div className="grid gap-8 lg:grid-cols-3">
           {cases.map((caseItem) => (
             <Link
-              key={caseItem.id}
-              href={caseItem.href}
+              key={caseItem.slug}
+              href={`/cases/${caseItem.slug}`}
               className="group overflow-hidden rounded-2xl border border-border bg-card transition-all hover:border-primary/50 hover:shadow-xl card-hover"
             >
               {/* Image */}
@@ -73,44 +63,42 @@ export function CasesPreviewSection() {
                 <div className="absolute inset-0 industrial-grid opacity-30" />
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="rounded-xl border border-border bg-card/80 p-6 backdrop-blur-sm">
-                    <span className="text-2xl font-bold text-primary">КЕЙС #{caseItem.id}</span>
+                    <span className="text-lg font-bold text-primary">КЕЙС</span>
                   </div>
                 </div>
-                {/* Overlay on hover */}
                 <div className="absolute inset-0 bg-primary/10 opacity-0 transition-opacity group-hover:opacity-100" />
               </div>
 
               {/* Content */}
               <div className="p-6">
-                {/* Tags */}
                 <div className="mb-4 flex items-center gap-3">
-                  <span className="flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
-                    <Tag className="h-3 w-3" />
-                    {caseItem.industry}
-                  </span>
+                  {caseItem.industry && (
+                    <span className="flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
+                      <Tag className="h-3 w-3" />
+                      {industryLabels[caseItem.industry] ?? caseItem.industry}
+                    </span>
+                  )}
                 </div>
 
-                {/* Title */}
                 <h3 className="mb-2 text-lg font-bold text-foreground group-hover:text-primary transition-colors">
                   {caseItem.title}
                 </h3>
 
-                {/* Description */}
-                <p className="mb-4 text-sm text-muted-foreground line-clamp-2">
-                  {caseItem.description}
-                </p>
+                {caseItem.description && (
+                  <p className="mb-4 text-sm text-muted-foreground line-clamp-2">
+                    {caseItem.description}
+                  </p>
+                )}
 
-                {/* Results */}
-                <div className="mb-4 space-y-1">
-                  {caseItem.results.slice(0, 2).map((result) => (
-                    <div key={result} className="flex items-center gap-2 text-sm text-muted-foreground">
+                {caseItem.results && (
+                  <div className="mb-4">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <div className="h-1 w-1 rounded-full bg-primary" />
-                      {result}
+                      {caseItem.results.slice(0, 80)}
                     </div>
-                  ))}
-                </div>
+                  </div>
+                )}
 
-                {/* Link */}
                 <div className="flex items-center gap-2 text-sm font-medium text-primary">
                   Подробнее о проекте
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />

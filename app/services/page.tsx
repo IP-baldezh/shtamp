@@ -1,14 +1,15 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Wrench, PenTool, Settings, Package } from "lucide-react";
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
+import { SiteHeader } from "@/components/layout/site-header";
+import { SiteFooter } from "@/components/layout/site-footer";
 import { Button } from "@/components/ui/button";
 import { CTASection } from "@/components/sections/cta";
 
 export const metadata: Metadata = {
   title: "Услуги | ШТАМП",
-  description: "Изготовление штампов, пресс-форм, проектирование оснастки, ремонт и модернизация. Полный цикл производства штамповой оснастки.",
+  description:
+    "Изготовление штампов, пресс-форм, проектирование оснастки, ремонт и модернизация. Полный цикл производства штамповой оснастки.",
 };
 
 const services = [
@@ -81,7 +82,7 @@ const services = [
 export default function ServicesPage() {
   return (
     <>
-      <Header />
+      <SiteHeader />
       <main className="min-h-screen bg-background pt-32">
         {/* Hero */}
         <section className="relative pb-16">
@@ -114,8 +115,8 @@ export default function ServicesPage() {
           <div className="mx-auto max-w-7xl px-6">
             <div className="space-y-12">
               {services.map((service, index) => {
-                const Icon = service.icon
-                const isEven = index % 2 === 0
+                const Icon = service.icon;
+                const isEven = index % 2 === 0;
                 return (
                   <div
                     key={service.slug}
@@ -169,7 +170,7 @@ export default function ServicesPage() {
                       <div className="text-muted-foreground">{service.stats.label}</div>
                     </div>
                   </div>
-                )
+                );
               })}
             </div>
           </div>
@@ -203,7 +204,7 @@ export default function ServicesPage() {
 
         <CTASection />
       </main>
-      <Footer />
+      <SiteFooter />
     </>
   );
 }

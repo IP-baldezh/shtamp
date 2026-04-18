@@ -1,15 +1,18 @@
 import { Factory, Users, Zap, Shield, Clock, Award, Cog, HeadphonesIcon } from "lucide-react";
+import { AnimatedSection, AnimatedList } from "@/components/ui/animated-section";
 
 const advantages = [
   {
     icon: Factory,
     title: "Собственное производство",
-    description: "Полный цикл изготовления на собственных мощностях в Москве. Контроль качества на каждом этапе.",
+    description:
+      "Полный цикл изготовления на собственных мощностях в Москве. Контроль качества на каждом этапе.",
   },
   {
     icon: Users,
     title: "Опытная команда",
-    description: "Инженеры и технологи с опытом 15+ лет. Экспертиза в сложных проектах для разных отраслей.",
+    description:
+      "Инженеры и технологи с опытом 15+ лет. Экспертиза в сложных проектах для разных отраслей.",
   },
   {
     icon: Zap,
@@ -34,7 +37,8 @@ const advantages = [
   {
     icon: Cog,
     title: "Гибкость производства",
-    description: "Работаем с единичными заказами и серийным производством. Адаптируемся под задачи клиента.",
+    description:
+      "Работаем с единичными заказами и серийным производством. Адаптируемся под задачи клиента.",
   },
   {
     icon: HeadphonesIcon,
@@ -48,10 +52,10 @@ export function AdvantagesSection() {
     <section className="relative py-24 bg-secondary/30">
       {/* Background pattern */}
       <div className="absolute inset-0 dot-pattern opacity-30" />
-      
+
       <div className="relative mx-auto max-w-7xl px-6">
         {/* Section header */}
-        <div className="mb-16 text-center">
+        <AnimatedSection className="mb-16 text-center">
           <div className="mb-4 text-sm font-semibold uppercase tracking-wider text-primary">
             Почему мы
           </div>
@@ -61,11 +65,11 @@ export function AdvantagesSection() {
           <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
             Комплексный подход к производству оснастки с гарантией результата
           </p>
-        </div>
+        </AnimatedSection>
 
         {/* Advantages grid */}
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {advantages.map((advantage, index) => (
+        <AnimatedList className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4" staggerDelay={0.07}>
+          {advantages.map((advantage) => (
             <div
               key={advantage.title}
               className="group rounded-xl border border-border bg-card p-6 transition-all hover:border-primary/50 hover:shadow-lg card-hover"
@@ -76,15 +80,11 @@ export function AdvantagesSection() {
               </div>
 
               {/* Content */}
-              <h3 className="mb-2 text-lg font-semibold text-foreground">
-                {advantage.title}
-              </h3>
-              <p className="text-sm text-muted-foreground">
-                {advantage.description}
-              </p>
+              <h3 className="mb-2 text-lg font-semibold text-foreground">{advantage.title}</h3>
+              <p className="text-sm text-muted-foreground">{advantage.description}</p>
             </div>
           ))}
-        </div>
+        </AnimatedList>
       </div>
     </section>
   );

@@ -1,14 +1,13 @@
 import { Metadata } from "next";
-import Link from "next/link";
-import { ArrowRight, Check, Shield, Ruler, FileCheck, Award, Eye, ClipboardCheck } from "lucide-react";
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
-import { Button } from "@/components/ui/button";
+import { Check, Shield, Ruler, FileCheck, Award, Eye, ClipboardCheck } from "lucide-react";
+import { SiteHeader } from "@/components/layout/site-header";
+import { SiteFooter } from "@/components/layout/site-footer";
 import { CTASection } from "@/components/sections/cta";
 
 export const metadata: Metadata = {
   title: "Контроль качества | ШТАМП",
-  description: "Система контроля качества по ISO 9001:2015. Входной, операционный и приемочный контроль. Современное измерительное оборудование.",
+  description:
+    "Система контроля качества по ISO 9001:2015. Входной, операционный и приемочный контроль. Современное измерительное оборудование.",
 };
 
 const controlStages = [
@@ -49,12 +48,7 @@ const controlStages = [
     icon: ClipboardCheck,
     title: "Документация",
     description: "Полный комплект документов качества",
-    checks: [
-      "Протоколы измерений",
-      "Сертификаты на материалы",
-      "Паспорт изделия",
-      "Акт испытаний",
-    ],
+    checks: ["Протоколы измерений", "Сертификаты на материалы", "Паспорт изделия", "Акт испытаний"],
   },
 ];
 
@@ -111,7 +105,7 @@ const tolerances = [
 export default function QualityPage() {
   return (
     <>
-      <Header />
+      <SiteHeader />
       <main className="pt-32">
         {/* Hero section */}
         <section className="relative pb-20">
@@ -127,9 +121,8 @@ export default function QualityPage() {
                 <span className="text-primary">на каждом этапе</span>
               </h1>
               <p className="mt-6 text-lg text-muted-foreground">
-                Сертифицированная система менеджмента качества ISO 9001:2015. 
-                Современное измерительное оборудование и строгий контроль 
-                на всех этапах производства.
+                Сертифицированная система менеджмента качества ISO 9001:2015. Современное
+                измерительное оборудование и строгий контроль на всех этапах производства.
               </p>
             </div>
           </div>
@@ -261,12 +254,10 @@ export default function QualityPage() {
           <div className="mx-auto max-w-7xl px-6">
             <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
               <div>
-                <h2 className="text-3xl font-bold text-foreground">
-                  Документация качества
-                </h2>
+                <h2 className="text-3xl font-bold text-foreground">Документация качества</h2>
                 <p className="mt-4 text-muted-foreground">
-                  Вместе с готовой оснасткой вы получаете полный комплект 
-                  документов, подтверждающих качество изготовления.
+                  Вместе с готовой оснасткой вы получаете полный комплект документов, подтверждающих
+                  качество изготовления.
                 </p>
                 <ul className="mt-8 space-y-4">
                   {[
@@ -292,8 +283,8 @@ export default function QualityPage() {
                   <h3 className="text-xl font-semibold text-foreground">Гарантия качества</h3>
                 </div>
                 <p className="text-muted-foreground mb-6">
-                  Предоставляем гарантию на изготовленную оснастку. При обнаружении 
-                  дефектов по нашей вине — бесплатное устранение.
+                  Предоставляем гарантию на изготовленную оснастку. При обнаружении дефектов по
+                  нашей вине — бесплатное устранение.
                 </p>
                 <div className="space-y-3">
                   <div className="flex justify-between border-b border-border pb-3">
@@ -316,7 +307,7 @@ export default function QualityPage() {
 
         <CTASection />
       </main>
-      <Footer />
+      <SiteFooter />
     </>
   );
 }

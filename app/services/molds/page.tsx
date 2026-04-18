@@ -1,14 +1,15 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, Check, Box, Thermometer, Droplets, Settings, Gauge, Shield } from "lucide-react";
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
+import { ArrowRight, Check, Box, Thermometer, Droplets } from "lucide-react";
+import { SiteHeader } from "@/components/layout/site-header";
+import { SiteFooter } from "@/components/layout/site-footer";
 import { Button } from "@/components/ui/button";
 import { CTASection } from "@/components/sections/cta";
 
 export const metadata: Metadata = {
   title: "Изготовление пресс-форм для литья | ШТАМП",
-  description: "Производство пресс-форм для литья пластмасс под давлением и литья металлов. Горячеканальные системы, многоместные формы.",
+  description:
+    "Производство пресс-форм для литья пластмасс под давлением и литья металлов. Горячеканальные системы, многоместные формы.",
 };
 
 const moldTypes = [
@@ -68,7 +69,7 @@ const specs = [
 export default function MoldsServicePage() {
   return (
     <>
-      <Header />
+      <SiteHeader />
       <main className="pt-32">
         {/* Hero section */}
         <section className="relative pb-20">
@@ -84,8 +85,8 @@ export default function MoldsServicePage() {
                 <span className="text-primary">для литья</span>
               </h1>
               <p className="mt-6 text-lg text-muted-foreground">
-                Проектируем и изготавливаем пресс-формы для литья пластмасс под давлением 
-                и литья алюминиевых сплавов. Современные горячеканальные системы.
+                Проектируем и изготавливаем пресс-формы для литья пластмасс под давлением и литья
+                алюминиевых сплавов. Современные горячеканальные системы.
               </p>
               <div className="mt-8 flex flex-col gap-4 sm:flex-row">
                 <Button size="lg" className="glow-blue-subtle" asChild>
@@ -124,7 +125,10 @@ export default function MoldsServicePage() {
                   <p className="mb-6 text-muted-foreground">{type.description}</p>
                   <ul className="space-y-2">
                     {type.features.map((feature) => (
-                      <li key={feature} className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <li
+                        key={feature}
+                        className="flex items-center gap-2 text-sm text-muted-foreground"
+                      >
                         <Check className="h-4 w-4 text-primary" />
                         {feature}
                       </li>
@@ -144,12 +148,10 @@ export default function MoldsServicePage() {
                 <div className="mb-4 text-sm font-semibold uppercase tracking-wider text-primary">
                   Технологии
                 </div>
-                <h2 className="text-3xl font-bold text-foreground">
-                  Горячеканальные системы
-                </h2>
+                <h2 className="text-3xl font-bold text-foreground">Горячеканальные системы</h2>
                 <p className="mt-4 text-muted-foreground">
-                  Внедряем современные горячеканальные системы ведущих производителей 
-                  для максимальной эффективности литьевого производства.
+                  Внедряем современные горячеканальные системы ведущих производителей для
+                  максимальной эффективности литьевого производства.
                 </p>
                 <ul className="mt-8 space-y-3">
                   {hotRunnerAdvantages.map((advantage) => (
@@ -165,14 +167,16 @@ export default function MoldsServicePage() {
                   Партнеры по горячеканальным системам
                 </h3>
                 <div className="grid gap-4 sm:grid-cols-2">
-                  {["YUDO", "HASCO", "Mold-Masters", "INCOE", "Synventive", "Husky"].map((partner) => (
-                    <div
-                      key={partner}
-                      className="rounded-lg border border-border bg-secondary/30 p-4 text-center font-medium text-foreground"
-                    >
-                      {partner}
-                    </div>
-                  ))}
+                  {["YUDO", "HASCO", "Mold-Masters", "INCOE", "Synventive", "Husky"].map(
+                    (partner) => (
+                      <div
+                        key={partner}
+                        className="rounded-lg border border-border bg-secondary/30 p-4 text-center font-medium text-foreground"
+                      >
+                        {partner}
+                      </div>
+                    ),
+                  )}
                 </div>
               </div>
             </div>
@@ -184,9 +188,7 @@ export default function MoldsServicePage() {
           <div className="mx-auto max-w-7xl px-6">
             <div className="mb-12 text-center">
               <h2 className="text-3xl font-bold text-foreground">Технические возможности</h2>
-              <p className="mt-4 text-muted-foreground">
-                Параметры изготавливаемых пресс-форм
-              </p>
+              <p className="mt-4 text-muted-foreground">Параметры изготавливаемых пресс-форм</p>
             </div>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {specs.map((spec) => (
@@ -207,12 +209,10 @@ export default function MoldsServicePage() {
           <div className="mx-auto max-w-7xl px-6">
             <div className="grid gap-12 lg:grid-cols-2">
               <div>
-                <h2 className="text-3xl font-bold text-foreground">
-                  Материалы для изготовления
-                </h2>
+                <h2 className="text-3xl font-bold text-foreground">Материалы для изготовления</h2>
                 <p className="mt-4 text-muted-foreground">
-                  Используем высококачественные инструментальные стали 
-                  европейских и российских производителей.
+                  Используем высококачественные инструментальные стали европейских и российских
+                  производителей.
                 </p>
                 <div className="mt-8 space-y-4">
                   <div className="rounded-lg border border-border bg-secondary/30 p-4">
@@ -236,14 +236,16 @@ export default function MoldsServicePage() {
                 </div>
               </div>
               <div className="rounded-xl border border-border bg-gradient-to-br from-primary/5 to-transparent p-8">
-                <h3 className="mb-6 text-xl font-semibold text-foreground">
-                  Процесс изготовления
-                </h3>
+                <h3 className="mb-6 text-xl font-semibold text-foreground">Процесс изготовления</h3>
                 <div className="space-y-6">
                   {[
                     { step: "1", title: "Проектирование", desc: "3D-модель, анализ заполнения" },
                     { step: "2", title: "Изготовление плит", desc: "Обработка на станках с ЧПУ" },
-                    { step: "3", title: "Формообразующие", desc: "Электроэрозия, шлифовка, полировка" },
+                    {
+                      step: "3",
+                      title: "Формообразующие",
+                      desc: "Электроэрозия, шлифовка, полировка",
+                    },
                     { step: "4", title: "Сборка", desc: "Подгонка, настройка систем" },
                     { step: "5", title: "Испытания", desc: "Отладка на ТПА, отработка режимов" },
                   ].map((item) => (
@@ -265,7 +267,7 @@ export default function MoldsServicePage() {
 
         <CTASection />
       </main>
-      <Footer />
+      <SiteFooter />
     </>
   );
 }

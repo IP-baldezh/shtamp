@@ -1,14 +1,15 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, Check, Wrench, RefreshCw, TrendingUp, Search, Settings, Shield } from "lucide-react";
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
+import { ArrowRight, Check, Wrench, RefreshCw, TrendingUp, Search } from "lucide-react";
+import { SiteHeader } from "@/components/layout/site-header";
+import { SiteFooter } from "@/components/layout/site-footer";
 import { Button } from "@/components/ui/button";
 import { CTASection } from "@/components/sections/cta";
 
 export const metadata: Metadata = {
   title: "Ремонт и модернизация штампов | ШТАМП",
-  description: "Восстановление работоспособности оснастки, увеличение ресурса, оптимизация конструкции штампов и пресс-форм.",
+  description:
+    "Восстановление работоспособности оснастки, увеличение ресурса, оптимизация конструкции штампов и пресс-форм.",
 };
 
 const services = [
@@ -111,7 +112,7 @@ const repairTypes = [
 export default function RepairServicePage() {
   return (
     <>
-      <Header />
+      <SiteHeader />
       <main className="pt-32">
         {/* Hero section */}
         <section className="relative pb-20">
@@ -127,8 +128,8 @@ export default function RepairServicePage() {
                 <span className="text-primary">штампов и пресс-форм</span>
               </h1>
               <p className="mt-6 text-lg text-muted-foreground">
-                Восстанавливаем работоспособность оснастки, продлеваем ресурс, 
-                улучшаем конструкцию. Ремонт штампов любых производителей.
+                Восстанавливаем работоспособность оснастки, продлеваем ресурс, улучшаем конструкцию.
+                Ремонт штампов любых производителей.
               </p>
               <div className="mt-8 flex flex-col gap-4 sm:flex-row">
                 <Button size="lg" className="glow-blue-subtle" asChild>
@@ -184,7 +185,10 @@ export default function RepairServicePage() {
                   <p className="mb-6 text-muted-foreground">{service.description}</p>
                   <ul className="grid gap-2 sm:grid-cols-2">
                     {service.features.map((feature) => (
-                      <li key={feature} className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <li
+                        key={feature}
+                        className="flex items-center gap-2 text-sm text-muted-foreground"
+                      >
                         <Check className="h-4 w-4 text-primary" />
                         {feature}
                       </li>
@@ -241,10 +245,26 @@ export default function RepairServicePage() {
             </div>
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
               {[
-                { step: "01", title: "Заявка", desc: "Получаем информацию о проблеме, фото, историю эксплуатации" },
-                { step: "02", title: "Диагностика", desc: "Осматриваем штамп, измеряем износ, составляем дефектную ведомость" },
-                { step: "03", title: "Согласование", desc: "Предоставляем смету, согласовываем объем и сроки работ" },
-                { step: "04", title: "Ремонт", desc: "Выполняем работы, контролируем качество, проводим испытания" },
+                {
+                  step: "01",
+                  title: "Заявка",
+                  desc: "Получаем информацию о проблеме, фото, историю эксплуатации",
+                },
+                {
+                  step: "02",
+                  title: "Диагностика",
+                  desc: "Осматриваем штамп, измеряем износ, составляем дефектную ведомость",
+                },
+                {
+                  step: "03",
+                  title: "Согласование",
+                  desc: "Предоставляем смету, согласовываем объем и сроки работ",
+                },
+                {
+                  step: "04",
+                  title: "Ремонт",
+                  desc: "Выполняем работы, контролируем качество, проводим испытания",
+                },
               ].map((item) => (
                 <div key={item.step} className="text-center">
                   <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-xl font-bold text-primary-foreground">
@@ -270,9 +290,7 @@ export default function RepairServicePage() {
                   </p>
                 </div>
                 <Button size="lg" className="glow-blue" asChild>
-                  <a href="tel:+74951234567">
-                    Позвонить сейчас
-                  </a>
+                  <a href="tel:+74951234567">Позвонить сейчас</a>
                 </Button>
               </div>
             </div>
@@ -281,7 +299,7 @@ export default function RepairServicePage() {
 
         <CTASection />
       </main>
-      <Footer />
+      <SiteFooter />
     </>
   );
 }

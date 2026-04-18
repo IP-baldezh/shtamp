@@ -1,25 +1,29 @@
 import { FileText, PenTool, Cog, CheckCircle, Truck, HeadphonesIcon } from "lucide-react";
+import { AnimatedSection } from "@/components/ui/animated-section";
 
 const steps = [
   {
     number: "01",
     icon: FileText,
     title: "Заявка и анализ",
-    description: "Получаем ТЗ или чертежи детали. Анализируем техническую возможность, предлагаем оптимальные решения.",
+    description:
+      "Получаем ТЗ или чертежи детали. Анализируем техническую возможность, предлагаем оптимальные решения.",
     duration: "1-2 дня",
   },
   {
     number: "02",
     icon: PenTool,
     title: "Проектирование",
-    description: "Разрабатываем 3D-модель штампа, проводим симуляцию, согласовываем конструкцию с заказчиком.",
+    description:
+      "Разрабатываем 3D-модель штампа, проводим симуляцию, согласовываем конструкцию с заказчиком.",
     duration: "5-10 дней",
   },
   {
     number: "03",
     icon: Cog,
     title: "Изготовление",
-    description: "Производим детали штампа на станках с ЧПУ, выполняем термообработку и слесарную сборку.",
+    description:
+      "Производим детали штампа на станках с ЧПУ, выполняем термообработку и слесарную сборку.",
     duration: "15-30 дней",
   },
   {
@@ -33,14 +37,16 @@ const steps = [
     number: "05",
     icon: Truck,
     title: "Отгрузка",
-    description: "Упаковываем оснастку, оформляем документацию, организуем доставку до объекта заказчика.",
+    description:
+      "Упаковываем оснастку, оформляем документацию, организуем доставку до объекта заказчика.",
     duration: "1-2 дня",
   },
   {
     number: "06",
     icon: HeadphonesIcon,
     title: "Сопровождение",
-    description: "Помогаем с внедрением, отвечаем на вопросы, при необходимости проводим корректировки.",
+    description:
+      "Помогаем с внедрением, отвечаем на вопросы, при необходимости проводим корректировки.",
     duration: "Бессрочно",
   },
 ];
@@ -50,7 +56,7 @@ export function ProcessSection() {
     <section className="relative py-24 bg-card">
       <div className="mx-auto max-w-7xl px-6">
         {/* Section header */}
-        <div className="mb-16 text-center">
+        <AnimatedSection className="mb-16 text-center">
           <div className="mb-4 text-sm font-semibold uppercase tracking-wider text-primary">
             Как мы работаем
           </div>
@@ -60,24 +66,30 @@ export function ProcessSection() {
           <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
             Прозрачный процесс с контрольными точками на каждом этапе
           </p>
-        </div>
+        </AnimatedSection>
 
         {/* Process steps */}
         <div className="relative">
           {/* Connection line - desktop */}
           <div className="absolute left-1/2 top-0 hidden h-full w-px -translate-x-1/2 bg-gradient-to-b from-primary via-primary/50 to-transparent lg:block" />
-          
+
           <div className="space-y-12 lg:space-y-0">
             {steps.map((step, index) => (
-              <div
+              <AnimatedSection
                 key={step.number}
+                direction={index % 2 === 0 ? "left" : "right"}
+                delay={0.1}
                 className={`relative flex flex-col lg:flex-row lg:items-center ${
                   index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"
                 }`}
               >
                 {/* Content */}
-                <div className={`flex-1 ${index % 2 === 0 ? "lg:pr-16 lg:text-right" : "lg:pl-16"}`}>
-                  <div className={`rounded-xl border border-border bg-secondary/30 p-6 ${index % 2 === 0 ? "lg:ml-auto" : ""} max-w-md`}>
+                <div
+                  className={`flex-1 ${index % 2 === 0 ? "lg:pr-16 lg:text-right" : "lg:pl-16"}`}
+                >
+                  <div
+                    className={`rounded-xl border border-border bg-secondary/30 p-6 ${index % 2 === 0 ? "lg:ml-auto" : ""} max-w-md`}
+                  >
                     <div className="mb-4 flex items-center gap-4">
                       <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
                         <step.icon className="h-6 w-6 text-primary" />
@@ -105,7 +117,7 @@ export function ProcessSection() {
 
                 {/* Spacer for alternating layout */}
                 <div className="hidden flex-1 lg:block" />
-              </div>
+              </AnimatedSection>
             ))}
           </div>
         </div>

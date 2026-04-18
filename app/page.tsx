@@ -1,5 +1,5 @@
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
+import { SiteHeader } from "@/components/layout/site-header";
+import { SiteFooter } from "@/components/layout/site-footer";
 import { HeroSection } from "@/components/sections/hero";
 import { ServicesSection } from "@/components/sections/services";
 import { TasksSection } from "@/components/sections/tasks";
@@ -17,7 +17,7 @@ import { CTASection } from "@/components/sections/cta";
 export default function HomePage() {
   return (
     <>
-      <Header />
+      <SiteHeader />
       <main>
         <HeroSection />
         <ServicesSection />
@@ -33,7 +33,7 @@ export default function HomePage() {
         <ArticlesPreviewSection />
         <CTASection />
       </main>
-      <Footer />
+      <SiteFooter />
     </>
   );
 }

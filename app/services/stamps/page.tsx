@@ -1,14 +1,15 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, Check, Layers, Settings, Gauge, Shield, Clock, FileText } from "lucide-react";
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
+import { ArrowRight, Check, Layers, Settings, Gauge, Shield, Clock } from "lucide-react";
+import { SiteHeader } from "@/components/layout/site-header";
+import { SiteFooter } from "@/components/layout/site-footer";
 import { Button } from "@/components/ui/button";
 import { CTASection } from "@/components/sections/cta";
 
 export const metadata: Metadata = {
   title: "Изготовление штампов холодной штамповки | ШТАМП",
-  description: "Производство штампов любой сложности: вырубные, гибочные, вытяжные, комбинированные. Собственное производство в Москве.",
+  description:
+    "Производство штампов любой сложности: вырубные, гибочные, вытяжные, комбинированные. Собственное производство в Москве.",
 };
 
 const stampTypes = [
@@ -79,7 +80,7 @@ const advantages = [
 export default function StampsServicePage() {
   return (
     <>
-      <Header />
+      <SiteHeader />
       <main className="pt-32">
         {/* Hero section */}
         <section className="relative pb-20">
@@ -95,8 +96,8 @@ export default function StampsServicePage() {
                 <span className="text-primary">холодной штамповки</span>
               </h1>
               <p className="mt-6 text-lg text-muted-foreground">
-                Проектируем и изготавливаем штампы любой сложности для серийного 
-                и массового производства деталей из листового металла.
+                Проектируем и изготавливаем штампы любой сложности для серийного и массового
+                производства деталей из листового металла.
               </p>
               <div className="mt-8 flex flex-col gap-4 sm:flex-row">
                 <Button size="lg" className="glow-blue-subtle" asChild>
@@ -135,7 +136,10 @@ export default function StampsServicePage() {
                   <p className="mb-4 text-sm text-muted-foreground">{type.description}</p>
                   <ul className="space-y-2">
                     {type.features.map((feature) => (
-                      <li key={feature} className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <li
+                        key={feature}
+                        className="flex items-center gap-2 text-sm text-muted-foreground"
+                      >
                         <Check className="h-4 w-4 text-primary" />
                         {feature}
                       </li>
@@ -172,12 +176,10 @@ export default function StampsServicePage() {
           <div className="mx-auto max-w-7xl px-6">
             <div className="grid gap-12 lg:grid-cols-2">
               <div>
-                <h2 className="text-3xl font-bold text-foreground">
-                  Материалы для штамповки
-                </h2>
+                <h2 className="text-3xl font-bold text-foreground">Материалы для штамповки</h2>
                 <p className="mt-4 text-muted-foreground">
-                  Проектируем штампы для работы с различными материалами, 
-                  учитывая их свойства и особенности обработки.
+                  Проектируем штампы для работы с различными материалами, учитывая их свойства и
+                  особенности обработки.
                 </p>
                 <ul className="mt-8 grid gap-3 sm:grid-cols-2">
                   {materials.map((material) => (
@@ -250,7 +252,7 @@ export default function StampsServicePage() {
 
         <CTASection />
       </main>
-      <Footer />
+      <SiteFooter />
     </>
   );
 }

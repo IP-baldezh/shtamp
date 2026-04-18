@@ -1,44 +1,37 @@
-import { createClient } from "@/lib/supabase/server"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Phone, Mail, Building2, Clock, Package, Calendar, FileText } from "lucide-react"
-import { MarkAsReadButton } from "@/components/admin/mark-as-read-button"
-import { DeleteRequestButton } from "@/components/admin/delete-request-button"
+import { createClient } from "@/lib/supabase/server";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Phone, Mail, Building2, Clock, FileText } from "lucide-react";
+import { MarkAsReadButton } from "@/components/admin/mark-as-read-button";
+import { DeleteRequestButton } from "@/components/admin/delete-request-button";
 
 export default async function AdminQuotesPage() {
-  const supabase = await createClient()
+  const supabase = await createClient();
   const { data: quotes } = await supabase
     .from("quote_requests")
     .select("*")
-    .order("created_at", { ascending: false })
+    .order("created_at", { ascending: false });
 
-  const unreadCount = quotes?.filter((q) => !q.is_read).length || 0
+  const unreadCount = quotes?.filter((q) => !q.is_read).length || 0;
 
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-foreground">Запросы КП</h1>
         <p className="text-muted-foreground">
-          {unreadCount > 0
-            ? `${unreadCount} непрочитанных запросов`
-            : "Все запросы прочитаны"}
+          {unreadCount > 0 ? `${unreadCount} непрочитанных запросов` : "Все запросы прочитаны"}
         </p>
       </div>
 
       {quotes && quotes.length > 0 ? (
         <div className="grid gap-4">
           {quotes.map((quote) => (
-            <Card
-              key={quote.id}
-              className={quote.is_read ? "opacity-75" : "border-primary/50"}
-            >
+            <Card key={quote.id} className={quote.is_read ? "opacity-75" : "border-primary/50"}>
               <CardContent className="p-4">
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
-                      <h3 className="font-semibold text-foreground">
-                        {quote.company}
-                      </h3>
+                      <h3 className="font-semibold text-foreground">{quote.company}</h3>
                       {!quote.is_read && <Badge>Новый</Badge>}
                       {quote.has_drawings && (
                         <Badge variant="secondary">
@@ -55,19 +48,13 @@ export default async function AdminQuotesPage() {
                       </div>
                       <div className="flex items-center gap-2">
                         <Phone className="w-4 h-4" />
-                        <a
-                          href={`tel:${quote.phone}`}
-                          className="hover:text-foreground"
-                        >
+                        <a href={`tel:${quote.phone}`} className="hover:text-foreground">
                           {quote.phone}
                         </a>
                       </div>
                       <div className="flex items-center gap-2">
                         <Mail className="w-4 h-4" />
-                        <a
-                          href={`mailto:${quote.email}`}
-                          className="hover:text-foreground"
-                        >
+                        <a href={`mailto:${quote.email}`} className="hover:text-foreground">
                           {quote.email}
                         </a>
                       </div>
@@ -113,9 +100,7 @@ export default async function AdminQuotesPage() {
                   </div>
 
                   <div className="flex flex-col gap-2">
-                    {!quote.is_read && (
-                      <MarkAsReadButton id={quote.id} table="quote_requests" />
-                    )}
+                    {!quote.is_read && <MarkAsReadButton id={quote.id} table="quote_requests" />}
                     <DeleteRequestButton id={quote.id} table="quote_requests" />
                   </div>
                 </div>
@@ -131,5 +116,5 @@ export default async function AdminQuotesPage() {
         </Card>
       )}
     </div>
-  )
+  );
 }

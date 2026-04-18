@@ -1,14 +1,24 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, Check, PenTool, Monitor, FileText, Calculator, Cog, Shield } from "lucide-react";
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
+import {
+  ArrowRight,
+  Check,
+  PenTool,
+  Monitor,
+  FileText,
+  Calculator,
+  Cog,
+  Shield,
+} from "lucide-react";
+import { SiteHeader } from "@/components/layout/site-header";
+import { SiteFooter } from "@/components/layout/site-footer";
 import { Button } from "@/components/ui/button";
 import { CTASection } from "@/components/sections/cta";
 
 export const metadata: Metadata = {
   title: "Проектирование штампов и пресс-форм | ШТАМП",
-  description: "Полный цикл конструкторских работ: 3D-моделирование, расчет технологии, симуляция штамповки, выпуск КД по ЕСКД.",
+  description:
+    "Полный цикл конструкторских работ: 3D-моделирование, расчет технологии, симуляция штамповки, выпуск КД по ЕСКД.",
 };
 
 const services = [
@@ -49,12 +59,7 @@ const services = [
     icon: FileText,
     title: "Конструкторская документация",
     description: "Полный комплект чертежей и спецификаций по ЕСКД.",
-    details: [
-      "Сборочные чертежи",
-      "Деталировка",
-      "Спецификации",
-      "Технические условия",
-    ],
+    details: ["Сборочные чертежи", "Деталировка", "Спецификации", "Технические условия"],
   },
 ];
 
@@ -93,7 +98,7 @@ const advantages = [
 export default function DesignServicePage() {
   return (
     <>
-      <Header />
+      <SiteHeader />
       <main className="pt-32">
         {/* Hero section */}
         <section className="relative pb-20">
@@ -109,8 +114,8 @@ export default function DesignServicePage() {
                 <span className="text-primary">штампов и пресс-форм</span>
               </h1>
               <p className="mt-6 text-lg text-muted-foreground">
-                Полный цикл конструкторских работ: от анализа детали до выпуска 
-                рабочей документации. Современное ПО и симуляция процессов.
+                Полный цикл конструкторских работ: от анализа детали до выпуска рабочей
+                документации. Современное ПО и симуляция процессов.
               </p>
               <div className="mt-8 flex flex-col gap-4 sm:flex-row">
                 <Button size="lg" className="glow-blue-subtle" asChild>
@@ -153,7 +158,10 @@ export default function DesignServicePage() {
                   <p className="mb-6 text-muted-foreground">{service.description}</p>
                   <ul className="grid gap-2 sm:grid-cols-2">
                     {service.details.map((detail) => (
-                      <li key={detail} className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <li
+                        key={detail}
+                        className="flex items-center gap-2 text-sm text-muted-foreground"
+                      >
                         <Check className="h-4 w-4 text-primary" />
                         {detail}
                       </li>
@@ -190,12 +198,10 @@ export default function DesignServicePage() {
           <div className="mx-auto max-w-7xl px-6">
             <div className="grid gap-12 lg:grid-cols-2">
               <div>
-                <h2 className="text-3xl font-bold text-foreground">
-                  Программное обеспечение
-                </h2>
+                <h2 className="text-3xl font-bold text-foreground">Программное обеспечение</h2>
                 <p className="mt-4 text-muted-foreground">
-                  Используем лицензионное профессиональное ПО мировых лидеров 
-                  для проектирования и симуляции.
+                  Используем лицензионное профессиональное ПО мировых лидеров для проектирования и
+                  симуляции.
                 </p>
                 <div className="mt-8 grid gap-4 sm:grid-cols-2">
                   {software.map((sw) => (
@@ -210,15 +216,29 @@ export default function DesignServicePage() {
                 </div>
               </div>
               <div className="rounded-xl border border-border bg-secondary/30 p-8">
-                <h3 className="mb-6 text-xl font-semibold text-foreground">
-                  Этапы проектирования
-                </h3>
+                <h3 className="mb-6 text-xl font-semibold text-foreground">Этапы проектирования</h3>
                 <div className="space-y-6">
                   {[
-                    { step: "1", title: "Анализ ТЗ", desc: "Изучение чертежей детали, требований к качеству" },
-                    { step: "2", title: "Технология", desc: "Разработка маршрута, расчет переходов" },
-                    { step: "3", title: "3D-модель", desc: "Создание параметрической модели штампа" },
-                    { step: "4", title: "Симуляция", desc: "Проверка формообразования, оптимизация" },
+                    {
+                      step: "1",
+                      title: "Анализ ТЗ",
+                      desc: "Изучение чертежей детали, требований к качеству",
+                    },
+                    {
+                      step: "2",
+                      title: "Технология",
+                      desc: "Разработка маршрута, расчет переходов",
+                    },
+                    {
+                      step: "3",
+                      title: "3D-модель",
+                      desc: "Создание параметрической модели штампа",
+                    },
+                    {
+                      step: "4",
+                      title: "Симуляция",
+                      desc: "Проверка формообразования, оптимизация",
+                    },
                     { step: "5", title: "КД", desc: "Выпуск чертежей и спецификаций" },
                   ].map((item) => (
                     <div key={item.step} className="flex gap-4">
@@ -243,12 +263,10 @@ export default function DesignServicePage() {
             <div className="rounded-2xl border border-border bg-gradient-to-br from-primary/5 to-transparent p-8 md:p-12">
               <div className="grid gap-8 lg:grid-cols-2 lg:items-center">
                 <div>
-                  <h2 className="text-3xl font-bold text-foreground">
-                    Стоимость проектирования
-                  </h2>
+                  <h2 className="text-3xl font-bold text-foreground">Стоимость проектирования</h2>
                   <p className="mt-4 text-muted-foreground">
-                    Стоимость зависит от сложности детали, типа оснастки и требуемого 
-                    состава работ. Предоставляем детальную смету после анализа ТЗ.
+                    Стоимость зависит от сложности детали, типа оснастки и требуемого состава работ.
+                    Предоставляем детальную смету после анализа ТЗ.
                   </p>
                   <ul className="mt-6 space-y-3">
                     <li className="flex items-center gap-2 text-foreground">
@@ -272,9 +290,7 @@ export default function DesignServicePage() {
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>
                   </Button>
-                  <p className="text-sm text-muted-foreground">
-                    Ответим в течение 1 рабочего дня
-                  </p>
+                  <p className="text-sm text-muted-foreground">Ответим в течение 1 рабочего дня</p>
                 </div>
               </div>
             </div>
@@ -283,7 +299,7 @@ export default function DesignServicePage() {
 
         <CTASection />
       </main>
-      <Footer />
+      <SiteFooter />
     </>
   );
 }

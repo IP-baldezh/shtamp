@@ -1,23 +1,25 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { createClient } from "@/lib/supabase/client"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Switch } from "@/components/ui/switch"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Switch } from "@/components/ui/switch";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Loader2, ArrowLeft, Save } from "lucide-react"
-import Link from "next/link"
+} from "@/components/ui/select";
+import { Loader2, ArrowLeft, Save } from "lucide-react";
+import Link from "next/link";
+import { toast } from "sonner";
+import { ImageUpload } from "./image-upload";
 
 const categories = [
   "Расточные станки",
@@ -27,23 +29,23 @@ const categories = [
   "Шлифовальные станки",
   "Прессовое оборудование",
   "Измерительное оборудование",
-]
+];
 
 interface EquipmentFormProps {
   initialData?: {
-    id?: string
-    name: string
-    category: string
-    description: string
-    specifications: Record<string, string>
-    image_url: string
-    sort_order: number
-    is_active: boolean
-  }
+    id?: string;
+    name: string;
+    category: string;
+    description: string;
+    specifications: Record<string, string>;
+    image_url: string;
+    sort_order: number;
+    is_active: boolean;
+  };
 }
 
 export function EquipmentForm({ initialData }: EquipmentFormProps) {
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: initialData?.name || "",
     category: initialData?.category || "",
@@ -52,45 +54,53 @@ export function EquipmentForm({ initialData }: EquipmentFormProps) {
     image_url: initialData?.image_url || "",
     sort_order: initialData?.sort_order || 0,
     is_active: initialData?.is_active ?? true,
-  })
-  const [specKey, setSpecKey] = useState("")
-  const [specValue, setSpecValue] = useState("")
-  const router = useRouter()
-  const supabase = createClient()
-  const isEditing = !!initialData?.id
+  });
+  const [specKey, setSpecKey] = useState("");
+  const [specValue, setSpecValue] = useState("");
+  const router = useRouter();
+  const supabase = createClient();
+  const isEditing = !!initialData?.id;
 
   const addSpecification = () => {
     if (specKey && specValue) {
       setFormData((prev) => ({
         ...prev,
         specifications: { ...prev.specifications, [specKey]: specValue },
-      }))
-      setSpecKey("")
-      setSpecValue("")
+      }));
+      setSpecKey("");
+      setSpecValue("");
     }
-  }
+  };
 
   const removeSpecification = (key: string) => {
     setFormData((prev) => {
-      const newSpecs = { ...prev.specifications }
-      delete newSpecs[key]
-      return { ...prev, specifications: newSpecs }
-    })
-  }
+      const newSpecs = { ...prev.specifications };
+      delete newSpecs[key];
+      return { ...prev, specifications: newSpecs };
+    });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
+    e.preventDefault();
+    setIsLoading(true);
 
+    let error;
     if (isEditing) {
-      await supabase.from("equipment").update(formData).eq("id", initialData.id)
+      ({ error } = await supabase.from("equipment").update(formData).eq("id", initialData.id));
     } else {
-      await supabase.from("equipment").insert(formData)
+      ({ error } = await supabase.from("equipment").insert(formData));
     }
 
-    router.push("/admin/equipment")
-    router.refresh()
-  }
+    if (error) {
+      toast.error("Ошибка сохранения: " + error.message);
+      setIsLoading(false);
+      return;
+    }
+
+    toast.success(isEditing ? "Оборудование обновлено" : "Оборудование добавлено");
+    router.push("/admin/equipment");
+    router.refresh();
+  };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -167,7 +177,12 @@ export function EquipmentForm({ initialData }: EquipmentFormProps) {
                 <Textarea
                   id="description"
                   value={formData.description}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      description: e.target.value,
+                    }))
+                  }
                   placeholder="Описание оборудования..."
                   rows={4}
                 />
@@ -248,7 +263,10 @@ export function EquipmentForm({ initialData }: EquipmentFormProps) {
                   type="number"
                   value={formData.sort_order}
                   onChange={(e) =>
-                    setFormData((prev) => ({ ...prev, sort_order: parseInt(e.target.value) || 0 }))
+                    setFormData((prev) => ({
+                      ...prev,
+                      sort_order: parseInt(e.target.value) || 0,
+                    }))
                   }
                 />
               </div>
@@ -259,29 +277,15 @@ export function EquipmentForm({ initialData }: EquipmentFormProps) {
             <CardHeader>
               <CardTitle>Изображение</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="image_url">URL изображения</Label>
-                <Input
-                  id="image_url"
-                  value={formData.image_url}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, image_url: e.target.value }))}
-                  placeholder="https://..."
-                />
-              </div>
-              {formData.image_url && (
-                <div className="aspect-video bg-muted rounded-lg overflow-hidden">
-                  <img
-                    src={formData.image_url}
-                    alt="Preview"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              )}
+            <CardContent>
+              <ImageUpload
+                value={formData.image_url}
+                onChange={(url) => setFormData((prev) => ({ ...prev, image_url: url }))}
+              />
             </CardContent>
           </Card>
         </div>
       </div>
     </form>
-  )
+  );
 }

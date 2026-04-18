@@ -1,8 +1,8 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import { CheckCircle, Phone, Mail, ArrowRight, Clock, FileText, Users } from "lucide-react";
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
+import { SiteHeader } from "@/components/layout/site-header";
+import { SiteFooter } from "@/components/layout/site-footer";
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 export default function ThankYouPage() {
   return (
     <>
-      <Header />
+      <SiteHeader />
       <main className="flex min-h-screen items-center bg-background pt-32">
         <section className="w-full py-20">
           <div className="mx-auto max-w-7xl px-6">
@@ -62,7 +62,9 @@ export default function ThankYouPage() {
                       3
                     </div>
                     <div>
-                      <h3 className="mb-1 font-semibold text-foreground">Коммерческое предложение</h3>
+                      <h3 className="mb-1 font-semibold text-foreground">
+                        Коммерческое предложение
+                      </h3>
                       <p className="text-sm text-muted-foreground">
                         Подготовим детальный расчёт с техническим описанием и сроками
                       </p>
@@ -105,7 +107,9 @@ export default function ThankYouPage() {
 
               {/* Contact Info */}
               <div className="rounded-xl bg-secondary/50 p-6">
-                <p className="mb-4 text-muted-foreground">Если у вас срочный вопрос, свяжитесь с нами напрямую:</p>
+                <p className="mb-4 text-muted-foreground">
+                  Если у вас срочный вопрос, свяжитесь с нами напрямую:
+                </p>
                 <div className="flex flex-col justify-center gap-4 sm:flex-row">
                   <a
                     href="tel:+74951234567"
@@ -127,7 +131,7 @@ export default function ThankYouPage() {
           </div>
         </section>
       </main>
-      <Footer />
+      <SiteFooter />
     </>
   );
 }

@@ -1,6 +1,7 @@
 import js from "@eslint/js";
 import tseslint from "typescript-eslint";
 import prettierConfig from "eslint-config-prettier";
+import unusedImports from "eslint-plugin-unused-imports";
 
 const vitestGlobals = {
   describe: "readonly",
@@ -19,12 +20,18 @@ const eslintConfig = tseslint.config(
   ...tseslint.configs.recommended,
   prettierConfig,
   {
+    plugins: {
+      "unused-imports": unusedImports,
+    },
     rules: {
-      // TypeScript
-      "@typescript-eslint/no-unused-vars": [
-        "error",
-        { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
+      // Auto-fixable unused imports
+      "unused-imports/no-unused-imports": "error",
+      "unused-imports/no-unused-vars": [
+        "warn",
+        { vars: "all", varsIgnorePattern: "^_", args: "after-used", argsIgnorePattern: "^_" },
       ],
+      // Disable the built-in rule in favour of unused-imports
+      "@typescript-eslint/no-unused-vars": "off",
       "@typescript-eslint/no-explicit-any": "warn",
 
       // General
@@ -42,6 +49,7 @@ const eslintConfig = tseslint.config(
       "scripts/**",
       "*.config.mjs",
       "*.config.js",
+      "components/ui/use-toast.ts",
     ],
   },
   {

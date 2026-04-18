@@ -1,14 +1,15 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Car, Zap, Package, Home, Wrench, Settings, Cog, Factory } from "lucide-react";
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
+import { SiteHeader } from "@/components/layout/site-header";
+import { SiteFooter } from "@/components/layout/site-footer";
 import { Button } from "@/components/ui/button";
 import { CTASection } from "@/components/sections/cta";
 
 export const metadata: Metadata = {
   title: "Отрасли применения | ШТАМП",
-  description: "Производим штампы и пресс-формы для автомобильной, электротехнической, упаковочной промышленности и других отраслей.",
+  description:
+    "Производим штампы и пресс-формы для автомобильной, электротехнической, упаковочной промышленности и других отраслей.",
 };
 
 const industries = [
@@ -36,7 +37,12 @@ const industries = [
     slug: "packaging",
     description:
       "Пресс-формы и штампы для производства металлической тары, крышек, укупорочных изделий и промышленной упаковки.",
-    products: ["Банки и контейнеры", "Крышки и укупорка", "Промышленная тара", "Аэрозольная упаковка"],
+    products: [
+      "Банки и контейнеры",
+      "Крышки и укупорка",
+      "Промышленная тара",
+      "Аэрозольная упаковка",
+    ],
     features: ["Высокая производительность", "Гигиенические стандарты", "Оптимизация материала"],
   },
   {
@@ -45,7 +51,12 @@ const industries = [
     slug: "appliances",
     description:
       "Штамповая оснастка для производства корпусов и компонентов бытовой техники: холодильников, стиральных машин, кухонного оборудования.",
-    products: ["Корпуса техники", "Панели управления", "Внутренние элементы", "Декоративные детали"],
+    products: [
+      "Корпуса техники",
+      "Панели управления",
+      "Внутренние элементы",
+      "Декоративные детали",
+    ],
     features: ["Эстетичная поверхность", "Точная геометрия", "Долговечность"],
   },
   {
@@ -89,7 +100,7 @@ const industries = [
 export default function IndustriesPage() {
   return (
     <>
-      <Header />
+      <SiteHeader />
       <main className="min-h-screen bg-background pt-32">
         {/* Hero Section */}
         <section className="relative pb-16">
@@ -110,8 +121,8 @@ export default function IndustriesPage() {
                 Отрасли применения
               </h1>
               <p className="text-lg text-muted-foreground">
-                Более 18 лет мы производим штамповую оснастку для ведущих предприятий 
-                различных отраслей промышленности. Наш опыт — ваше конкурентное преимущество.
+                Более 18 лет мы производим штамповую оснастку для ведущих предприятий различных
+                отраслей промышленности. Наш опыт — ваше конкурентное преимущество.
               </p>
             </div>
           </div>
@@ -122,7 +133,7 @@ export default function IndustriesPage() {
           <div className="mx-auto max-w-7xl px-6">
             <div className="grid gap-8 lg:grid-cols-2">
               {industries.map((industry, index) => {
-                const Icon = industry.icon
+                const Icon = industry.icon;
                 return (
                   <div
                     key={index}
@@ -179,7 +190,7 @@ export default function IndustriesPage() {
                       <ArrowRight className="h-4 w-4" />
                     </Link>
                   </div>
-                )
+                );
               })}
             </div>
           </div>
@@ -196,7 +207,9 @@ export default function IndustriesPage() {
                 { value: "18", label: "Лет опыта" },
               ].map((stat, index) => (
                 <div key={index} className="text-center">
-                  <div className="mb-2 text-4xl font-bold text-primary lg:text-5xl">{stat.value}</div>
+                  <div className="mb-2 text-4xl font-bold text-primary lg:text-5xl">
+                    {stat.value}
+                  </div>
                   <div className="text-muted-foreground">{stat.label}</div>
                 </div>
               ))}
@@ -229,7 +242,7 @@ export default function IndustriesPage() {
 
         <CTASection />
       </main>
-      <Footer />
+      <SiteFooter />
     </>
-  )
+  );
 }

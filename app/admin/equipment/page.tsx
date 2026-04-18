@@ -1,17 +1,38 @@
-import { createClient } from "@/lib/supabase/server"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Plus, Pencil, Image as ImageIcon, GripVertical } from "lucide-react"
-import { DeleteEquipmentButton } from "@/components/admin/delete-equipment-button"
+import { createClient } from "@/lib/supabase/server";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+  Plus,
+  Pencil,
+  Image as ImageIcon,
+  GripVertical,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
+import { DeleteEquipmentButton } from "@/components/admin/delete-equipment-button";
 
-export default async function AdminEquipmentPage() {
-  const supabase = await createClient()
-  const { data: equipment } = await supabase
+const PAGE_SIZE = 10;
+
+export default async function AdminEquipmentPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
+  const { page: pageParam } = await searchParams;
+  const page = Math.max(1, parseInt(pageParam ?? "1", 10));
+  const from = (page - 1) * PAGE_SIZE;
+  const to = from + PAGE_SIZE - 1;
+
+  const supabase = await createClient();
+  const { data: equipment, count } = await supabase
     .from("equipment")
-    .select("*")
+    .select("*", { count: "exact" })
     .order("sort_order", { ascending: true })
+    .range(from, to);
+
+  const totalPages = Math.ceil((count ?? 0) / PAGE_SIZE);
 
   return (
     <div className="space-y-6">
@@ -54,12 +75,8 @@ export default async function AdminEquipmentPage() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-4">
                       <div>
-                        <h3 className="font-semibold text-foreground">
-                          {item.name}
-                        </h3>
-                        <p className="text-sm text-muted-foreground">
-                          {item.category}
-                        </p>
+                        <h3 className="font-semibold text-foreground">{item.name}</h3>
+                        <p className="text-sm text-muted-foreground">{item.category}</p>
                         {item.description && (
                           <p className="text-sm text-muted-foreground line-clamp-1 mt-1">
                             {item.description}
@@ -99,6 +116,28 @@ export default async function AdminEquipmentPage() {
           </CardContent>
         </Card>
       )}
+
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between">
+          <p className="text-sm text-muted-foreground">
+            Страница {page} из {totalPages}
+          </p>
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm" asChild disabled={page <= 1}>
+              <Link href={`/admin/equipment?page=${page - 1}`}>
+                <ChevronLeft className="w-4 h-4 mr-1" />
+                Назад
+              </Link>
+            </Button>
+            <Button variant="outline" size="sm" asChild disabled={page >= totalPages}>
+              <Link href={`/admin/equipment?page=${page + 1}`}>
+                Вперёд
+                <ChevronRight className="w-4 h-4 ml-1" />
+              </Link>
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
-  )
+  );
 }

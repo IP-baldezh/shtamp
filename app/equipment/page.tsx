@@ -1,14 +1,15 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Check, Cpu, Ruler, Zap, Factory, Settings, Shield } from "lucide-react";
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
+import { SiteHeader } from "@/components/layout/site-header";
+import { SiteFooter } from "@/components/layout/site-footer";
 import { Button } from "@/components/ui/button";
 import { CTASection } from "@/components/sections/cta";
 
 export const metadata: Metadata = {
   title: "Оборудование производства | ШТАМП",
-  description: "Парк современного оборудования: станки с ЧПУ, электроэрозионные станки, координатно-измерительные машины, термическое оборудование.",
+  description:
+    "Парк современного оборудования: станки с ЧПУ, электроэрозионные станки, координатно-измерительные машины, термическое оборудование.",
 };
 
 const equipmentCategories = [
@@ -90,7 +91,7 @@ const stats = [
 export default function EquipmentPage() {
   return (
     <>
-      <Header />
+      <SiteHeader />
       <main className="pt-32">
         {/* Hero section */}
         <section className="relative pb-20">
@@ -106,8 +107,8 @@ export default function EquipmentPage() {
                 <span className="text-primary">нашего производства</span>
               </h1>
               <p className="mt-6 text-lg text-muted-foreground">
-                Парк современного оборудования ведущих мировых производителей 
-                обеспечивает высокую точность и качество изготовления оснастки.
+                Парк современного оборудования ведущих мировых производителей обеспечивает высокую
+                точность и качество изготовления оснастки.
               </p>
             </div>
           </div>
@@ -173,12 +174,60 @@ export default function EquipmentPage() {
             </div>
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {[
-                { title: "Механическая обработка", items: ["Фрезерование до 1000×500 мм", "Токарная обработка до Ø350 мм", "5-осевая обработка", "Точность до 0.005 мм"] },
-                { title: "Электроэрозия", items: ["Проволочная резка до 400 мм", "Прошивка глубиной до 400 мм", "Обработка твердых сплавов", "Микроэрозия до 0.02 мм"] },
-                { title: "Шлифование", items: ["Плоское шлифование", "Координатное шлифование", "Профильное шлифование", "Ra до 0.1 мкм"] },
-                { title: "Термообработка", items: ["Закалка до 62 HRC", "Вакуумная закалка", "Азотирование", "Криогенная обработка"] },
-                { title: "Контроль качества", items: ["3D-измерения на КИМ", "Контроль шероховатости", "Твердость по Роквеллу", "Протоколы измерений"] },
-                { title: "Слесарная обработка", items: ["Полировка до Ra 0.05", "Подгонка сопряжений", "Сборка штампов", "Испытания"] },
+                {
+                  title: "Механическая обработка",
+                  items: [
+                    "Фрезерование до 1000×500 мм",
+                    "Токарная обработка до Ø350 мм",
+                    "5-осевая обработка",
+                    "Точность до 0.005 мм",
+                  ],
+                },
+                {
+                  title: "Электроэрозия",
+                  items: [
+                    "Проволочная резка до 400 мм",
+                    "Прошивка глубиной до 400 мм",
+                    "Обработка твердых сплавов",
+                    "Микроэрозия до 0.02 мм",
+                  ],
+                },
+                {
+                  title: "Шлифование",
+                  items: [
+                    "Плоское шлифование",
+                    "Координатное шлифование",
+                    "Профильное шлифование",
+                    "Ra до 0.1 мкм",
+                  ],
+                },
+                {
+                  title: "Термообработка",
+                  items: [
+                    "Закалка до 62 HRC",
+                    "Вакуумная закалка",
+                    "Азотирование",
+                    "Криогенная обработка",
+                  ],
+                },
+                {
+                  title: "Контроль качества",
+                  items: [
+                    "3D-измерения на КИМ",
+                    "Контроль шероховатости",
+                    "Твердость по Роквеллу",
+                    "Протоколы измерений",
+                  ],
+                },
+                {
+                  title: "Слесарная обработка",
+                  items: [
+                    "Полировка до Ra 0.05",
+                    "Подгонка сопряжений",
+                    "Сборка штампов",
+                    "Испытания",
+                  ],
+                },
               ].map((capability) => (
                 <div
                   key={capability.title}
@@ -187,7 +236,10 @@ export default function EquipmentPage() {
                   <h3 className="mb-4 font-semibold text-foreground">{capability.title}</h3>
                   <ul className="space-y-2">
                     {capability.items.map((item) => (
-                      <li key={item} className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <li
+                        key={item}
+                        className="flex items-center gap-2 text-sm text-muted-foreground"
+                      >
                         <Check className="h-4 w-4 text-primary" />
                         {item}
                       </li>
@@ -203,12 +255,10 @@ export default function EquipmentPage() {
         <section className="py-20">
           <div className="mx-auto max-w-7xl px-6">
             <div className="rounded-2xl border border-border bg-gradient-to-br from-primary/5 to-transparent p-8 md:p-12 text-center">
-              <h2 className="text-3xl font-bold text-foreground">
-                Хотите увидеть производство?
-              </h2>
+              <h2 className="text-3xl font-bold text-foreground">Хотите увидеть производство?</h2>
               <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
-                Приглашаем на экскурсию по нашему производственному комплексу. 
-                Покажем оборудование и процессы изготовления.
+                Приглашаем на экскурсию по нашему производственному комплексу. Покажем оборудование
+                и процессы изготовления.
               </p>
               <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
                 <Button size="lg" className="glow-blue-subtle" asChild>
@@ -224,7 +274,7 @@ export default function EquipmentPage() {
 
         <CTASection />
       </main>
-      <Footer />
+      <SiteFooter />
     </>
   );
 }

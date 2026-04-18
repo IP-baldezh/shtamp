@@ -1,10 +1,18 @@
-import { createClient } from "@/lib/supabase/server"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Plus, Pencil, Eye, Star, Image as ImageIcon } from "lucide-react"
-import { DeleteCaseButton } from "@/components/admin/delete-case-button"
+import { createClient } from "@/lib/supabase/server";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+  Plus,
+  Pencil,
+  Eye,
+  Star,
+  Image as ImageIcon,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
+import { DeleteCaseButton } from "@/components/admin/delete-case-button";
 
 const industryLabels: Record<string, string> = {
   automotive: "Автопром",
@@ -15,23 +23,35 @@ const industryLabels: Record<string, string> = {
   medical: "Медицина",
   energy: "Энергетика",
   defense: "ОПК",
-}
+};
 
-export default async function AdminCasesPage() {
-  const supabase = await createClient()
-  const { data: cases } = await supabase
+const PAGE_SIZE = 10;
+
+export default async function AdminCasesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
+  const { page: pageParam } = await searchParams;
+  const page = Math.max(1, parseInt(pageParam ?? "1", 10));
+  const from = (page - 1) * PAGE_SIZE;
+  const to = from + PAGE_SIZE - 1;
+
+  const supabase = await createClient();
+  const { data: cases, count } = await supabase
     .from("cases")
-    .select("*")
+    .select("*", { count: "exact" })
     .order("created_at", { ascending: false })
+    .range(from, to);
+
+  const totalPages = Math.ceil((count ?? 0) / PAGE_SIZE);
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-foreground">Кейсы</h1>
-          <p className="text-muted-foreground">
-            Управление портфолио проектов
-          </p>
+          <p className="text-muted-foreground">Управление портфолио проектов</p>
         </div>
         <Button asChild>
           <Link href="/admin/cases/new">
@@ -65,9 +85,7 @@ export default async function AdminCasesPage() {
                     <div className="flex items-start justify-between gap-4">
                       <div>
                         <div className="flex items-center gap-2">
-                          <h3 className="font-semibold text-foreground">
-                            {caseItem.title}
-                          </h3>
+                          <h3 className="font-semibold text-foreground">{caseItem.title}</h3>
                           {caseItem.featured && (
                             <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
                           )}
@@ -76,9 +94,7 @@ export default async function AdminCasesPage() {
                           {caseItem.description}
                         </p>
                       </div>
-                      <Badge
-                        variant={caseItem.status === "published" ? "default" : "secondary"}
-                      >
+                      <Badge variant={caseItem.status === "published" ? "default" : "secondary"}>
                         {caseItem.status === "published" ? "Опубликован" : "Черновик"}
                       </Badge>
                     </div>
@@ -90,9 +106,7 @@ export default async function AdminCasesPage() {
                         </span>
                       )}
                       {caseItem.client && (
-                        <span className="text-xs text-muted-foreground">
-                          {caseItem.client}
-                        </span>
+                        <span className="text-xs text-muted-foreground">{caseItem.client}</span>
                       )}
                     </div>
 
@@ -132,6 +146,28 @@ export default async function AdminCasesPage() {
           </CardContent>
         </Card>
       )}
+
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between">
+          <p className="text-sm text-muted-foreground">
+            Страница {page} из {totalPages}
+          </p>
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm" asChild disabled={page <= 1}>
+              <Link href={`/admin/cases?page=${page - 1}`}>
+                <ChevronLeft className="w-4 h-4 mr-1" />
+                Назад
+              </Link>
+            </Button>
+            <Button variant="outline" size="sm" asChild disabled={page >= totalPages}>
+              <Link href={`/admin/cases?page=${page + 1}`}>
+                Вперёд
+                <ChevronRight className="w-4 h-4 ml-1" />
+              </Link>
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
-  )
+  );
 }

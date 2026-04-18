@@ -1,17 +1,39 @@
-import { createClient } from "@/lib/supabase/server"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Plus, Pencil, Eye, Image as ImageIcon, Calendar } from "lucide-react"
-import { DeleteArticleButton } from "@/components/admin/delete-article-button"
+import { createClient } from "@/lib/supabase/server";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+  Plus,
+  Pencil,
+  Eye,
+  Image as ImageIcon,
+  Calendar,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
+import { DeleteArticleButton } from "@/components/admin/delete-article-button";
 
-export default async function AdminArticlesPage() {
-  const supabase = await createClient()
-  const { data: articles } = await supabase
+const PAGE_SIZE = 10;
+
+export default async function AdminArticlesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
+  const { page: pageParam } = await searchParams;
+  const page = Math.max(1, parseInt(pageParam ?? "1", 10));
+  const from = (page - 1) * PAGE_SIZE;
+  const to = from + PAGE_SIZE - 1;
+
+  const supabase = await createClient();
+  const { data: articles, count } = await supabase
     .from("articles")
-    .select("*")
+    .select("*", { count: "exact" })
     .order("created_at", { ascending: false })
+    .range(from, to);
+
+  const totalPages = Math.ceil((count ?? 0) / PAGE_SIZE);
 
   return (
     <div className="space-y-6">
@@ -49,25 +71,19 @@ export default async function AdminArticlesPage() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-4">
                       <div>
-                        <h3 className="font-semibold text-foreground">
-                          {article.title}
-                        </h3>
+                        <h3 className="font-semibold text-foreground">{article.title}</h3>
                         <p className="text-sm text-muted-foreground line-clamp-2 mt-1">
                           {article.excerpt}
                         </p>
                       </div>
-                      <Badge
-                        variant={article.status === "published" ? "default" : "secondary"}
-                      >
+                      <Badge variant={article.status === "published" ? "default" : "secondary"}>
                         {article.status === "published" ? "Опубликована" : "Черновик"}
                       </Badge>
                     </div>
 
                     <div className="flex items-center gap-4 mt-3">
                       {article.category && (
-                        <span className="text-xs text-muted-foreground">
-                          {article.category}
-                        </span>
+                        <span className="text-xs text-muted-foreground">{article.category}</span>
                       )}
                       {article.published_at && (
                         <span className="flex items-center gap-1 text-xs text-muted-foreground">
@@ -113,6 +129,28 @@ export default async function AdminArticlesPage() {
           </CardContent>
         </Card>
       )}
+
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between">
+          <p className="text-sm text-muted-foreground">
+            Страница {page} из {totalPages}
+          </p>
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm" asChild disabled={page <= 1}>
+              <Link href={`/admin/articles?page=${page - 1}`}>
+                <ChevronLeft className="w-4 h-4 mr-1" />
+                Назад
+              </Link>
+            </Button>
+            <Button variant="outline" size="sm" asChild disabled={page >= totalPages}>
+              <Link href={`/admin/articles?page=${page + 1}`}>
+                Вперёд
+                <ChevronRight className="w-4 h-4 ml-1" />
+              </Link>
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
-  )
+  );
 }

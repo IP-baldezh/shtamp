@@ -1,13 +1,13 @@
 import Link from "next/link";
 import { Home, ArrowRight, Search, Phone } from "lucide-react";
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
+import { SiteHeader } from "@/components/layout/site-header";
+import { SiteFooter } from "@/components/layout/site-footer";
 import { Button } from "@/components/ui/button";
 
 export default function NotFound() {
   return (
     <>
-      <Header />
+      <SiteHeader />
       <main className="flex min-h-screen items-center justify-center bg-background px-6 pt-32">
         <div className="mx-auto max-w-2xl text-center">
           {/* 404 Visual */}
@@ -22,7 +22,9 @@ export default function NotFound() {
             </div>
           </div>
 
-          <h1 className="mb-4 text-3xl font-bold text-foreground lg:text-4xl">Страница не найдена</h1>
+          <h1 className="mb-4 text-3xl font-bold text-foreground lg:text-4xl">
+            Страница не найдена
+          </h1>
           <p className="mb-8 text-lg text-muted-foreground">
             К сожалению, запрашиваемая страница не существует или была перемещена. Возможно, вы
             перешли по устаревшей ссылке или допустили опечатку в адресе.
@@ -67,7 +69,7 @@ export default function NotFound() {
           </div>
         </div>
       </main>
-      <Footer />
+      <SiteFooter />
     </>
   );
 }

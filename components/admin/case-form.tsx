@@ -1,23 +1,25 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { createClient } from "@/lib/supabase/client"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Switch } from "@/components/ui/switch"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Switch } from "@/components/ui/switch";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Loader2, ArrowLeft, Save } from "lucide-react"
-import Link from "next/link"
+} from "@/components/ui/select";
+import { Loader2, ArrowLeft, Save } from "lucide-react";
+import Link from "next/link";
+import { toast } from "sonner";
+import { ImageUpload } from "./image-upload";
 
 const industries = [
   { value: "automotive", label: "Автопром" },
@@ -28,35 +30,35 @@ const industries = [
   { value: "medical", label: "Медицина" },
   { value: "energy", label: "Энергетика" },
   { value: "defense", label: "ОПК" },
-]
+];
 
 const services = [
   { value: "stamps", label: "Штампы" },
   { value: "molds", label: "Пресс-формы" },
   { value: "design", label: "Проектирование" },
   { value: "repair", label: "Ремонт" },
-]
+];
 
 interface CaseFormProps {
   initialData?: {
-    id?: string
-    title: string
-    slug: string
-    description: string
-    client: string
-    industry: string
-    services: string[]
-    challenge: string
-    solution: string
-    results: string
-    image_url: string
-    status: string
-    featured: boolean
-  }
+    id?: string;
+    title: string;
+    slug: string;
+    description: string;
+    client: string;
+    industry: string;
+    services: string[];
+    challenge: string;
+    solution: string;
+    results: string;
+    image_url: string;
+    status: string;
+    featured: boolean;
+  };
 }
 
 export function CaseForm({ initialData }: CaseFormProps) {
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     title: initialData?.title || "",
     slug: initialData?.slug || "",
@@ -70,34 +72,63 @@ export function CaseForm({ initialData }: CaseFormProps) {
     image_url: initialData?.image_url || "",
     status: initialData?.status || "draft",
     featured: initialData?.featured || false,
-  })
-  const router = useRouter()
-  const supabase = createClient()
-  const isEditing = !!initialData?.id
+  });
+  const router = useRouter();
+  const supabase = createClient();
+  const isEditing = !!initialData?.id;
 
   const generateSlug = (title: string) => {
     return title
       .toLowerCase()
       .replace(/[а-яё]/g, (char) => {
         const map: Record<string, string> = {
-          а: "a", б: "b", в: "v", г: "g", д: "d", е: "e", ё: "yo", ж: "zh",
-          з: "z", и: "i", й: "y", к: "k", л: "l", м: "m", н: "n", о: "o",
-          п: "p", р: "r", с: "s", т: "t", у: "u", ф: "f", х: "h", ц: "c",
-          ч: "ch", ш: "sh", щ: "sch", ъ: "", ы: "y", ь: "", э: "e", ю: "yu", я: "ya",
-        }
-        return map[char] || char
+          а: "a",
+          б: "b",
+          в: "v",
+          г: "g",
+          д: "d",
+          е: "e",
+          ё: "yo",
+          ж: "zh",
+          з: "z",
+          и: "i",
+          й: "y",
+          к: "k",
+          л: "l",
+          м: "m",
+          н: "n",
+          о: "o",
+          п: "p",
+          р: "r",
+          с: "s",
+          т: "t",
+          у: "u",
+          ф: "f",
+          х: "h",
+          ц: "c",
+          ч: "ch",
+          ш: "sh",
+          щ: "sch",
+          ъ: "",
+          ы: "y",
+          ь: "",
+          э: "e",
+          ю: "yu",
+          я: "ya",
+        };
+        return map[char] || char;
       })
       .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-|-$/g, "")
-  }
+      .replace(/^-|-$/g, "");
+  };
 
   const handleTitleChange = (title: string) => {
     setFormData((prev) => ({
       ...prev,
       title,
       slug: prev.slug || generateSlug(title),
-    }))
-  }
+    }));
+  };
 
   const toggleService = (service: string) => {
     setFormData((prev) => ({
@@ -105,27 +136,35 @@ export function CaseForm({ initialData }: CaseFormProps) {
       services: prev.services.includes(service)
         ? prev.services.filter((s) => s !== service)
         : [...prev.services, service],
-    }))
-  }
+    }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
+    e.preventDefault();
+    setIsLoading(true);
 
     const data = {
       ...formData,
       slug: formData.slug || generateSlug(formData.title),
-    }
+    };
 
+    let error;
     if (isEditing) {
-      await supabase.from("cases").update(data).eq("id", initialData.id)
+      ({ error } = await supabase.from("cases").update(data).eq("id", initialData.id));
     } else {
-      await supabase.from("cases").insert(data)
+      ({ error } = await supabase.from("cases").insert(data));
     }
 
-    router.push("/admin/cases")
-    router.refresh()
-  }
+    if (error) {
+      toast.error("Ошибка сохранения: " + error.message);
+      setIsLoading(false);
+      return;
+    }
+
+    toast.success(isEditing ? "Кейс обновлён" : "Кейс создан");
+    router.push("/admin/cases");
+    router.refresh();
+  };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -194,7 +233,12 @@ export function CaseForm({ initialData }: CaseFormProps) {
                 <Textarea
                   id="description"
                   value={formData.description}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      description: e.target.value,
+                    }))
+                  }
                   placeholder="Разработка и изготовление комплекта штампов..."
                   rows={3}
                 />
@@ -206,7 +250,12 @@ export function CaseForm({ initialData }: CaseFormProps) {
                   <Input
                     id="client"
                     value={formData.client}
-                    onChange={(e) => setFormData((prev) => ({ ...prev, client: e.target.value }))}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        client: e.target.value,
+                      }))
+                    }
                     placeholder="АвтоВАЗ"
                   />
                 </div>
@@ -260,7 +309,12 @@ export function CaseForm({ initialData }: CaseFormProps) {
                 <Textarea
                   id="challenge"
                   value={formData.challenge}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, challenge: e.target.value }))}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      challenge: e.target.value,
+                    }))
+                  }
                   placeholder="Опишите задачу, которую нужно было решить..."
                   rows={4}
                 />
@@ -271,7 +325,12 @@ export function CaseForm({ initialData }: CaseFormProps) {
                 <Textarea
                   id="solution"
                   value={formData.solution}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, solution: e.target.value }))}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      solution: e.target.value,
+                    }))
+                  }
                   placeholder="Опишите, как вы решили задачу..."
                   rows={4}
                 />
@@ -282,7 +341,12 @@ export function CaseForm({ initialData }: CaseFormProps) {
                 <Textarea
                   id="results"
                   value={formData.results}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, results: e.target.value }))}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      results: e.target.value,
+                    }))
+                  }
                   placeholder="Опишите достигнутые результаты..."
                   rows={4}
                 />
@@ -319,7 +383,9 @@ export function CaseForm({ initialData }: CaseFormProps) {
                 <Switch
                   id="featured"
                   checked={formData.featured}
-                  onCheckedChange={(checked) => setFormData((prev) => ({ ...prev, featured: checked }))}
+                  onCheckedChange={(checked) =>
+                    setFormData((prev) => ({ ...prev, featured: checked }))
+                  }
                 />
               </div>
             </CardContent>
@@ -329,29 +395,15 @@ export function CaseForm({ initialData }: CaseFormProps) {
             <CardHeader>
               <CardTitle>Изображение</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="image_url">URL изображения</Label>
-                <Input
-                  id="image_url"
-                  value={formData.image_url}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, image_url: e.target.value }))}
-                  placeholder="https://..."
-                />
-              </div>
-              {formData.image_url && (
-                <div className="aspect-video bg-muted rounded-lg overflow-hidden">
-                  <img
-                    src={formData.image_url}
-                    alt="Preview"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              )}
+            <CardContent>
+              <ImageUpload
+                value={formData.image_url}
+                onChange={(url) => setFormData((prev) => ({ ...prev, image_url: url }))}
+              />
             </CardContent>
           </Card>
         </div>
       </div>
     </form>
-  )
+  );
 }

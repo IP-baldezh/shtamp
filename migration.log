@@ -1,0 +1,18 @@
+Processed: app/not-found.tsx
+Processed: app/page.tsx
+Processed: app/about/page.tsx
+Processed: app/articles/page.tsx
+Not Found: app/articles/[slug]/page.tsx
+Processed: app/cases/page.tsx
+Not Found: app/cases/[slug]/page.tsx
+Processed: app/contact/page.tsx
+Processed: app/equipment/page.tsx
+Processed: app/industries/page.tsx
+Processed: app/quality/page.tsx
+Processed: app/quote/page.tsx
+Processed: app/services/page.tsx
+Processed: app/services/design/page.tsx
+Processed: app/services/molds/page.tsx
+Processed: app/services/repair/page.tsx
+Processed: app/services/stamps/page.tsx
+Processed: app/thank-you/page.tsx

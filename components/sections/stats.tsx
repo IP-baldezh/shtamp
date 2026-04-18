@@ -31,47 +31,40 @@ const stats = [
   },
 ];
 
+import { AnimatedSection, AnimatedList } from "@/components/ui/animated-section";
+
 export function StatsSection() {
   return (
     <section className="relative py-24 overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-primary/5" />
-      
+
       <div className="relative mx-auto max-w-7xl px-6">
         {/* Section header */}
-        <div className="mb-16 text-center">
+        <AnimatedSection className="mb-16 text-center">
           <div className="mb-4 text-sm font-semibold uppercase tracking-wider text-primary">
             Цифры и факты
           </div>
           <h2 className="text-3xl font-bold text-foreground md:text-4xl">
             Наши достижения в цифрах
           </h2>
-        </div>
+        </AnimatedSection>
 
         {/* Stats grid */}
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        <AnimatedList className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3" staggerDelay={0.1}>
           {stats.map((stat) => (
-            <div
-              key={stat.label}
-              className="group relative text-center"
-            >
+            <div key={stat.label} className="group relative text-center">
               {/* Decorative line */}
               <div className="absolute left-1/2 top-0 h-1 w-12 -translate-x-1/2 rounded-full bg-gradient-to-r from-transparent via-primary to-transparent" />
-              
+
               <div className="pt-8">
-                <div className="text-5xl font-bold text-foreground md:text-6xl">
-                  {stat.value}
-                </div>
-                <div className="mt-2 text-lg font-semibold text-foreground">
-                  {stat.label}
-                </div>
-                <div className="mt-1 text-sm text-muted-foreground">
-                  {stat.description}
-                </div>
+                <div className="text-5xl font-bold text-foreground md:text-6xl">{stat.value}</div>
+                <div className="mt-2 text-lg font-semibold text-foreground">{stat.label}</div>
+                <div className="mt-1 text-sm text-muted-foreground">{stat.description}</div>
               </div>
             </div>
           ))}
-        </div>
+        </AnimatedList>
       </div>
     </section>
   );

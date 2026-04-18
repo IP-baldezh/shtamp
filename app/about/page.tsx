@@ -1,30 +1,56 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, Users, Award, Target, Heart, Lightbulb, Shield } from "lucide-react";
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
+import { ArrowRight, Users, Award, Target, Lightbulb, Shield } from "lucide-react";
+import { SiteHeader } from "@/components/layout/site-header";
+import { SiteFooter } from "@/components/layout/site-footer";
 import { Button } from "@/components/ui/button";
 import { CTASection } from "@/components/sections/cta";
 
 export const metadata: Metadata = {
   title: "О компании | ШТАМП",
-  description: "Компания ШТАМП — более 18 лет на рынке производства штампов и пресс-форм. Собственное производство в Москве, команда опытных инженеров.",
+  description:
+    "Компания ШТАМП — более 18 лет на рынке производства штампов и пресс-форм. Собственное производство в Москве, команда опытных инженеров.",
 };
 
 const milestones = [
-  { year: "2006", title: "Основание компании", description: "Начало работы с небольшой командой и базовым оборудованием" },
-  { year: "2010", title: "Расширение производства", description: "Приобретение первых станков с ЧПУ, увеличение площадей" },
-  { year: "2014", title: "Сертификация ISO", description: "Внедрение системы менеджмента качества ISO 9001" },
-  { year: "2017", title: "Модернизация парка", description: "Закупка электроэрозионного и измерительного оборудования" },
-  { year: "2020", title: "Новый цех", description: "Открытие нового производственного корпуса площадью 1000 м²" },
-  { year: "2024", title: "Сегодня", description: "Более 500 реализованных проектов, 150+ постоянных клиентов" },
+  {
+    year: "2006",
+    title: "Основание компании",
+    description: "Начало работы с небольшой командой и базовым оборудованием",
+  },
+  {
+    year: "2010",
+    title: "Расширение производства",
+    description: "Приобретение первых станков с ЧПУ, увеличение площадей",
+  },
+  {
+    year: "2014",
+    title: "Сертификация ISO",
+    description: "Внедрение системы менеджмента качества ISO 9001",
+  },
+  {
+    year: "2017",
+    title: "Модернизация парка",
+    description: "Закупка электроэрозионного и измерительного оборудования",
+  },
+  {
+    year: "2020",
+    title: "Новый цех",
+    description: "Открытие нового производственного корпуса площадью 1000 м²",
+  },
+  {
+    year: "2024",
+    title: "Сегодня",
+    description: "Более 500 реализованных проектов, 150+ постоянных клиентов",
+  },
 ];
 
 const values = [
   {
     icon: Target,
     title: "Качество",
-    description: "Строгий контроль на каждом этапе. Готовая оснастка соответствует всем требованиям КД.",
+    description:
+      "Строгий контроль на каждом этапе. Готовая оснастка соответствует всем требованиям КД.",
   },
   {
     icon: Users,
@@ -62,7 +88,7 @@ const stats = [
 export default function AboutPage() {
   return (
     <>
-      <Header />
+      <SiteHeader />
       <main className="pt-32">
         {/* Hero section */}
         <section className="relative pb-20">
@@ -77,13 +103,12 @@ export default function AboutPage() {
                   Производим
                   <br />
                   <span className="text-primary">качественную оснастку</span>
-                  <br />
-                  с 2006 года
+                  <br />с 2006 года
                 </h1>
                 <p className="mt-6 text-lg text-muted-foreground">
-                  Компания ШТАМП специализируется на проектировании и изготовлении 
-                  штампов холодной штамповки и пресс-форм для литья. За годы работы 
-                  мы стали надежным партнером для предприятий различных отраслей.
+                  Компания ШТАМП специализируется на проектировании и изготовлении штампов холодной
+                  штамповки и пресс-форм для литья. За годы работы мы стали надежным партнером для
+                  предприятий различных отраслей.
                 </p>
                 <div className="mt-8 flex flex-col gap-4 sm:flex-row">
                   <Button size="lg" className="glow-blue-subtle" asChild>
@@ -118,8 +143,8 @@ export default function AboutPage() {
             <div className="mx-auto max-w-3xl text-center">
               <h2 className="text-3xl font-bold text-foreground">Наша миссия</h2>
               <p className="mt-6 text-xl text-muted-foreground">
-                Помогать производственным предприятиям выпускать качественную продукцию, 
-                обеспечивая их надежной и эффективной технологической оснасткой.
+                Помогать производственным предприятиям выпускать качественную продукцию, обеспечивая
+                их надежной и эффективной технологической оснасткой.
               </p>
             </div>
           </div>
@@ -153,16 +178,14 @@ export default function AboutPage() {
           <div className="mx-auto max-w-7xl px-6">
             <div className="mb-12">
               <h2 className="text-3xl font-bold text-foreground">История компании</h2>
-              <p className="mt-4 text-muted-foreground">
-                Ключевые этапы развития за 18 лет работы
-              </p>
+              <p className="mt-4 text-muted-foreground">Ключевые этапы развития за 18 лет работы</p>
             </div>
             <div className="relative">
               {/* Timeline line */}
               <div className="absolute left-8 top-0 hidden h-full w-px bg-border md:block" />
-              
+
               <div className="space-y-8">
-                {milestones.map((milestone, index) => (
+                {milestones.map((milestone, _index) => (
                   <div key={milestone.year} className="relative flex gap-8">
                     {/* Year marker */}
                     <div className="relative z-10 flex h-16 w-16 shrink-0 items-center justify-center rounded-full border-4 border-background bg-primary text-sm font-bold text-primary-foreground">
@@ -191,10 +214,7 @@ export default function AboutPage() {
             </div>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {team.map((member) => (
-                <div
-                  key={member.role}
-                  className="rounded-xl border border-border bg-card p-6"
-                >
+                <div key={member.role} className="rounded-xl border border-border bg-card p-6">
                   <div className="mb-4 flex items-center justify-between">
                     <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
                       <Users className="h-6 w-6 text-primary" />
@@ -216,12 +236,10 @@ export default function AboutPage() {
           <div className="mx-auto max-w-7xl px-6">
             <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
               <div>
-                <h2 className="text-3xl font-bold text-foreground">
-                  Почему выбирают нас
-                </h2>
+                <h2 className="text-3xl font-bold text-foreground">Почему выбирают нас</h2>
                 <p className="mt-4 text-muted-foreground">
-                  Сочетание опыта, современного оборудования и ответственного 
-                  подхода к каждому проекту.
+                  Сочетание опыта, современного оборудования и ответственного подхода к каждому
+                  проекту.
                 </p>
                 <ul className="mt-8 space-y-4">
                   {[
@@ -272,7 +290,7 @@ export default function AboutPage() {
 
         <CTASection />
       </main>
-      <Footer />
+      <SiteFooter />
     </>
   );
 }

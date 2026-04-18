@@ -1,35 +1,19 @@
+import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
-import { ArrowRight, Calendar, Clock, FileText } from "lucide-react";
+import { ArrowRight, Calendar, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-const articles = [
-  {
-    slug: "how-to-choose-stamp-manufacturer",
-    title: "Как выбрать производителя штампов: 7 ключевых критериев",
-    excerpt: "Практическое руководство по выбору надёжного подрядчика для изготовления штамповой оснастки. Рассматриваем производственные мощности, опыт и гарантии.",
-    category: "Руководства",
-    readTime: "8 мин",
-    date: "15 марта 2024",
-  },
-  {
-    slug: "repair-vs-new-stamp",
-    title: "Когда ремонт штампа выгоднее изготовления нового",
-    excerpt: "Анализ экономической целесообразности ремонта vs замены оснастки. Критерии принятия решения и расчёт рентабельности.",
-    category: "Аналитика",
-    readTime: "6 мин",
-    date: "10 марта 2024",
-  },
-  {
-    slug: "stamp-resource-increase",
-    title: "5 способов увеличить ресурс штамповой оснастки",
-    excerpt: "Проверенные методы продления срока службы штампов: выбор материалов, покрытия, режимы эксплуатации и профилактическое обслуживание.",
-    category: "Технологии",
-    readTime: "10 мин",
-    date: "5 марта 2024",
-  },
-];
+export async function ArticlesPreviewSection() {
+  const supabase = await createClient();
+  const { data: articles } = await supabase
+    .from("articles")
+    .select("slug, title, excerpt, category, published_at")
+    .eq("status", "published")
+    .order("published_at", { ascending: false })
+    .limit(3);
 
-export function ArticlesPreviewSection() {
+  if (!articles || articles.length === 0) return null;
+
   return (
     <section className="relative py-24">
       <div className="mx-auto max-w-7xl px-6">
@@ -39,9 +23,7 @@ export function ArticlesPreviewSection() {
             <div className="mb-4 text-sm font-semibold uppercase tracking-wider text-primary">
               Блог
             </div>
-            <h2 className="text-3xl font-bold text-foreground md:text-4xl">
-              Экспертные статьи
-            </h2>
+            <h2 className="text-3xl font-bold text-foreground md:text-4xl">Экспертные статьи</h2>
             <p className="mt-4 text-lg text-muted-foreground">
               Делимся опытом и знаниями в области штамповки и инструментального производства
             </p>
@@ -75,32 +57,34 @@ export function ArticlesPreviewSection() {
 
               {/* Content */}
               <div className="p-6">
-                {/* Meta */}
                 <div className="mb-4 flex items-center gap-4 text-sm text-muted-foreground">
-                  <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
-                    {article.category}
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <Clock className="h-3.5 w-3.5" />
-                    {article.readTime}
-                  </span>
+                  {article.category && (
+                    <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
+                      {article.category}
+                    </span>
+                  )}
                 </div>
 
-                {/* Title */}
                 <h3 className="mb-3 text-lg font-bold text-foreground group-hover:text-primary transition-colors line-clamp-2">
                   {article.title}
                 </h3>
 
-                {/* Excerpt */}
-                <p className="mb-4 text-sm text-muted-foreground line-clamp-2">
-                  {article.excerpt}
-                </p>
+                {article.excerpt && (
+                  <p className="mb-4 text-sm text-muted-foreground line-clamp-2">
+                    {article.excerpt}
+                  </p>
+                )}
 
-                {/* Date */}
-                <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                  <Calendar className="h-3.5 w-3.5" />
-                  {article.date}
-                </div>
+                {article.published_at && (
+                  <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                    <Calendar className="h-3.5 w-3.5" />
+                    {new Date(article.published_at).toLocaleDateString("ru-RU", {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    })}
+                  </div>
+                )}
               </div>
             </Link>
           ))}
